@@ -13,7 +13,7 @@
   - 챌린지 참여 횟수 (translation에서 userId로 검색해서 나오는 count)
   - 최다 추천 선정 횟수
   - userLevel(일반, 전문가)
-  - authority(일반, 어드민)
+  - isAdmin(Boolean)
     
 - Challenge
   - id(PK)
