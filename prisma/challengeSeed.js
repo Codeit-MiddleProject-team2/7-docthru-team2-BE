@@ -7,7 +7,6 @@ export const challengeData = [
     dueDate: "2025-06-05T23:59:59Z",
     maximum: 10,
     description: "파이썬 초급",
-    isAdmitted: "accepted",
     id: "1",
     userId: "3",
   },
@@ -19,7 +18,6 @@ export const challengeData = [
     dueDate: "2025-06-07T23:59:59Z",
     maximum: 11,
     description: "리액트 hooks",
-    isAdmitted: "accepted",
     id: "2",
     userId: "18",
   },
@@ -31,7 +29,6 @@ export const challengeData = [
     dueDate: "2025-06-09T23:59:59Z",
     maximum: 12,
     description: "Node.js 비동기 프로그래밍",
-    isAdmitted: "accepted",
     id: "3",
     userId: "5",
   },
@@ -43,7 +40,6 @@ export const challengeData = [
     dueDate: "2025-06-11T23:59:59Z",
     maximum: 13,
     description: "Django 기초",
-    isAdmitted: "accepted",
     id: "4",
     userId: "10",
   },
@@ -55,7 +51,6 @@ export const challengeData = [
     dueDate: "2025-06-13T23:59:59Z",
     maximum: 14,
     description: "Docker 시작하기",
-    isAdmitted: "accepted",
     id: "5",
     userId: "2",
   },
@@ -67,7 +62,6 @@ export const challengeData = [
     dueDate: "2025-06-15T23:59:59Z",
     maximum: 10,
     description: "Next.js App Router",
-    isAdmitted: "accepted",
     id: "6",
     userId: "4",
   },
@@ -79,8 +73,38 @@ export const challengeData = [
     dueDate: "2025-06-17T23:59:59Z",
     maximum: 11,
     description: "Jest test framework",
-    isAdmitted: "accepted",
     id: "7",
     userId: "2",
+  },
+];
+
+export const challengeStatusData = [
+  {
+    challengeId: "1",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "2",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "3",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "4",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "5",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "6",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "7",
+    state: "ACCEPTED",
   },
 ];
