@@ -10,18 +10,25 @@
 - (cmd) CREATE DATABASE docthru
 - /l 로 있는지 확인
 
-2. be폴더 세팅
+2. be폴더 세팅, 초기 데이터 시딩
 
 - (cmd) npm install
 - .env 파일 수정.
 - "postgres:super123%21%40%23" 으로 되어 있는 부분을 "postgres:본인 비밀번호"로 수정
 - (cmd) npx prisma generate
+- 이후 초기 데이터 시딩
+- (cmd) npx prisma db seed
 
 3. 실행
 
 - (cmd) npm run dev
 - 정상적으로 실행되면 성공
 - 만약 scehema.prisma 파일을 건드는 경우에는 추가 세팅이 필요합니다. 변경 필요하면 말씀하세요.
+
+4. 마이그레이션
+
+- 스키마 변경한 경우 실행해야 함.
+- (cmd) npx prisma migrate dev --name db
 
 # 파일 실행 순서
 
