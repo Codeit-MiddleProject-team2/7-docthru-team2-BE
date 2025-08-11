@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ChallengeState } from "@prisma/client";
-import { challengeData } from "./challengeSeed.js";
+import { challengeData, challengeStatusData } from "./challengeSeed.js";
 import { feedbackData } from "./feedbackSeed.js";
 import { heartsData } from "./heartsSeed.js";
 import { translationData } from "./translationSeed.js";
@@ -40,14 +39,10 @@ async function main() {
     });
   }
 
-  const challengeList = await prisma.challenge.findMany();
   // 챌린지 상태 데이터 넣기
-  for (const challenge of challengeList) {
+  for (const status of challengeStatusData) {
     await prisma.challengeStatusManage.create({
-      data: {
-        challengeId: challenge.id,
-        state: ChallengeState.ACCEPTED,
-      },
+      data: status,
     });
   }
 

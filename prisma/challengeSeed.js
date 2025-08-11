@@ -77,3 +77,34 @@ export const challengeData = [
     userId: "2",
   },
 ];
+
+export const challengeStatusData = [
+  {
+    challengeId: "1",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "2",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "3",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "4",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "5",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "6",
+    state: "ACCEPTED",
+  },
+  {
+    challengeId: "7",
+    state: "ACCEPTED",
+  },
+];
