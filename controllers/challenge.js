@@ -11,7 +11,7 @@ export class ChallengeController {
             next(error);
         }
     }
-};
+
 
 getChallengeByID = async (req, res, next) => {
     try {
@@ -40,4 +40,5 @@ updateChallenge = async (req, res, next) => {
     }
     };
 
+};
 
