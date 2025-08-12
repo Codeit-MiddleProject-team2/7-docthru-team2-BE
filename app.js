@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
+import myChallengeRouter from "./routes/myChallenge.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/mychallenge/apply", myChallengeRouter);
 
 // 서버 실행
 const PORT = 5000;
