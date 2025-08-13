@@ -6,7 +6,7 @@ export async function findMyChallenges(userId) {
   return await prisma.challenge.findMany({
     where: { userId },
     include: {
-      challengeStatusManage: {
+      ChallengeStatusManage: {
         select: {
           state: true,
         },
