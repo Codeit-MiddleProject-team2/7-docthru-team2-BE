@@ -9,5 +9,18 @@ export class ChallengeRepository {
             orderBy : {createdAt: 'desc'},
         });
     };
-    
+
+    findChallengeById = async (challengeId) => {
+        return await prisma.challenge.findUnique({
+            where: {id:challengeId},
+        });
+    };
+
+    updateChallenge = async (challengeId, updata) => {
+        return await prisma.challenge.update({
+            where: { id: challengeId},
+            data: updateData,
+        });
+    };
+
 }
