@@ -1,16 +1,16 @@
-import express from 'express';
-import { challengeController} from '../controllers/challenge.js';
+import express from "express";
+import { ChallengeController } from "../controllers/challenge.js";
 
 const router = express.Router();
-const challengesController = new challengeController();
+const challengesController = new ChallengeController();
 
 //메인. 모든 챌린지 조회
-router.get('/', challengesController.getAllChallenges);
+router.get("/", challengesController.getAllChallenges);
 
 //특정 챌린지 조회
-router.get('/:challengeId', challengesController/getChallengeById);
+router.get("/:challengeId", challengesController.getChallengeById);
 
 //챌린지 수정하기 (계속하기)
-router.patch('/:challengeId', challengesController,updateChallenge);
+router.patch("/:challengeId", challengesController.updateChallenge);
 
 export default router;
