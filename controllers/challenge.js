@@ -15,9 +15,7 @@ export class ChallengeController {
   getChallengeById = async (req, res, next) => {
     try {
       const { challengeId } = req.params;
-      const challenge = await this.challengeService.findChallengeById(
-        challengeId
-      );
+      const challenge = await this.challengeService.findChallengeById(challengeId);
       if (!challenge) {
         return res.status(404).json({ message: "챌린지를 찾을 수 없습니다." });
       }
@@ -29,15 +27,34 @@ export class ChallengeController {
 
   updateChallenge = async (req, res, next) => {
     try {
-      const { challengeID } = req.params;
+      const { challengeId } = req.params;
       const updateData = req.body;
-      const updateChallenge = await this.challengeService.updateChallenge(
-        challengeId,
-        updateChallenge
-      );
+      const updatedChallenge = await this.challengeService.updateChallenge(challengeId, updateData);
       return res.status(200).json({ data: updatedChallenge });
     } catch (error) {
       next(error);
+    }
+  };
+
+  getChallengeViewById = async (req, res, next) => {
+    try {
+      const { challengeId } = req.params;
+      const data = await this.challengeService.getChallengeViewById(challengeId);
+      if (!data) return res.status(404).json({ message: "챌린지를 찾을 수 없습니다." });
+      return res.status(200).json({ data });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  updateChallengeWithStatus = async (req, res, next) => {
+    try {
+      const { challengeId } = req.params;
+      const updateData = req.body;
+      const data = await this.challengeService.updateChallengeWithStatus(challengeId, updateData);
+      return res.status(200).json({ data });
+    } catch (err) {
+      next(err);
     }
   };
 }
