@@ -13,4 +13,6 @@ router.get("/:challengeId", challengesController.getChallengeById);
 //챌린지 수정하기 (계속하기)
 router.patch("/:challengeId", challengesController.updateChallenge);
 
+router.get("/:challengeId/view", challengesController.getChallengeViewById);
+
 export default router;
