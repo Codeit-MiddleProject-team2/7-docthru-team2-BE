@@ -57,6 +57,18 @@ export const getUser = async (email, password) => {
   }
 };
 
+// id로 유저 찾기
+export const getUserById = async (id) => {
+  const user = await findUserById(id);
+
+  if (!user) {
+    noUserError();
+  }
+
+  const { password, ...rest } = user;
+  return rest;
+};
+
 const noUserError = () => {
   const error = new Error("입력된 정보와 일치하는 사용자가 존재하지 않습니다.");
   error.code = 401;
