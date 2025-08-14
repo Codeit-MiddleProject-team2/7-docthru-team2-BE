@@ -4,10 +4,18 @@ import {
   postUser,
 } from "../repositories/user.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // 비밀번호 해시 함수
 async function hashingPassword(password) {
   return bcrypt.hash(password, 10);
+}
+
+// 토큰 생성 함수
+export function createToken(user) {
+  const payload = { userId: user.id };
+  const options = { expiresIn: "1h" };
+  return jwt.sign(payload, process.env.JWT_SECRET, options);
 }
 
 // 회원가입
@@ -36,11 +44,7 @@ export const getUser = async (email, password) => {
   const user = await findUserByEmail(email);
   // 이메일이 존재하지 않는 경우
   if (!user) {
-    const error = new Error(
-      "입력된 정보와 일치하는 사용자가 존재하지 않습니다."
-    );
-    error.code = 401;
-    throw error;
+    noUserError();
   }
 
   // 비밀번호 해싱해서 일치하는지 확인
@@ -49,10 +53,12 @@ export const getUser = async (email, password) => {
     const { password, ...rest } = user;
     return rest;
   } else {
-    const error = new Error(
-      "입력된 정보와 일치하는 사용자가 존재하지 않습니다."
-    );
-    error.code = 401;
-    throw error;
+    noUserError();
   }
+};
+
+const noUserError = () => {
+  const error = new Error("입력된 정보와 일치하는 사용자가 존재하지 않습니다.");
+  error.code = 401;
+  throw error;
 };

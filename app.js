@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
 import cors from "cors";
 import myChallengeRouter from "./routes/myChallenge.js";
 import userRouter from "./routes/user.js";
 import challengeRouter from "./routes/challenge.js";
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
