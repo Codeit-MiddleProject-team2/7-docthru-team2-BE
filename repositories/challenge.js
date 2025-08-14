@@ -3,50 +3,32 @@ import { skip } from "@prisma/client/runtime/library";
 const prisma = new PrismaClient();
 
 export class ChallengeRepository {
-  findAllChallenges = async () => {
-    return await prisma.challenge.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        ChallengeStatusManage: {
-          select: { state: true, updatedAt: true, reason: true },
-          orderBy: { updatedAt: "desc" },
-          take: 1,
-        },
-      },
-    });
+
+  findAllChallenges = async ({skip = 0, take = 5, where = {}} = {}) => {
+    const [items, total] = await Promise.all([
+        prisma.challenge.findMany({
+            where,
+            orderBy: { createdAt: 'desc' }, //최신순
+            skip,
+            take,
+        }),
+        prisma.challenge.count({where}),
+    ]);
+    return { items, total };
   };
 
   findChallengeById = async (challengeId) => {
     return await prisma.challenge.findUnique({
-      where: { id: challengeId },
-      include: {
-        ChallengeStatusManage: {
-          select: { state: true, updatedAt: true, reason: true },
-          orderBy: { updatedAt: "desc" },
-          take: 1,
-        },
-      },
+        where: {id:challengeId},
     });
   };
 
-  updateChallenge = async (challengeId, updata) => {
-    return await prisma.challenge.update({
-      where: { id: challengeId },
-      data: updateData,
-      include: {
-        ChallengeStatusManage: {
-          select: { state: true, updatedAt: true, reason: true },
-          orderBy: { updateAt: "desc" },
-          take: 1,
-        },
-      },
-    });
-  };
+  updateChallenge = async (challengeId, updateData) => {
+  return prisma.challenge.update({
+  where: { id: Number(challengeId) },
+  data: updateData,
+  });
 
-  createChallengeStatus = async (challengeId, { state, reason }) => {
-    return prisma.challengeStatusManage.create({
-      data: { challengeId, state, reason },
-    });
   };
   // 추가: 상태 포함 단건 조회
   findChallengeViewById = async (challengeId) => {

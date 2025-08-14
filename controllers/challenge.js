@@ -1,7 +1,7 @@
 import { ChallengeService } from "../services/challenge.js";
 
 export class ChallengeController {
-  challengeService = new ChallengeService();
+    challengeService = new challengeService();
 
   getAllChallenges = async (req, res, next) => {
     try {

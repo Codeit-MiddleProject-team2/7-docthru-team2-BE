@@ -57,3 +57,25 @@ export class ChallengeService {
     return this.getChallengeViewById(challengeId);
   };
 }
+const repo = new ChallengeRepository();
+export async function getChallenges({ page = 1, pageSize = 5, q, category, type, state } = {}) {
+    const where = {
+      ...(q && { title: { contains: q, mode: 'insensitive' } }),
+      ...(type && { docType: type }),
+      ...(state && { status: state }),
+      ...(Array.isArray(category) && category.length ? { category: { in: category } } : {}),
+    };
+  
+    const skip = (Math.max(1, Number(page)) - 1) * Number(pageSize);
+    const take = Number(pageSize);
+  
+    const { items, total } = await repo.findAllChallenges({ skip, take, where });
+  
+    return {
+      challenges: items,
+      page: Number(page),
+      pageSize: take,
+      totalCount: total,
+      totalPages: Math.max(1, Math.ceil(total / take)),
+    };
+}
