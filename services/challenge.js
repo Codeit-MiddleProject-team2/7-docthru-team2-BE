@@ -10,28 +10,28 @@ export class ChallengeService {
     return await this.challengeRepository.findChallengeById(challengeId);
   };
   updateChallenge = async (challengeId, updateData) => {
-    return await this.challengeRepository.updateChallenge(challengeId, updateData);
+    return await this.challengeRepository.updateChallenge(
+      challengeId,
+      updateData
+    );
   };
 
   getChallengeViewById = async (challengeId) => {
-    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
+    const challenge = await this.challengeRepository.findChallengeViewById(
+      challengeId
+    );
 
     if (!challenge) {
       return null;
     }
 
+    const { ChallengeStatusManage, ...rest } = challenge;
+
     return {
-      id: challenge.id,
-      title: challenge.title,
-      description: challenge.description,
-      category: challenge.category,
-      type: challenge.type,
-      url: challenge.url,
+      ...rest,
       challengeState: challenge.ChallengeStatusManage.state,
-      updatedAt: challenge.ChallengeStatusManage.updatedAt ?? challenge.updatedAt,
-      dueDate: challenge.dueDate,
-      maximum: challenge.maximum,
-      createdAt: challenge.createdAt,
+      updatedAt:
+        challenge.ChallengeStatusManage.updatedAt ?? challenge.updatedAt,
       reason: challenge.ChallengeStatusManage.reason ?? null,
     };
   };
@@ -44,7 +44,10 @@ export class ChallengeService {
       if (ChallengeState && !valid.includes(ChallengeState)) {
         throw new Error(`Invalid ChallengeState: ${ChallengeState}`);
       }
-      await this.challengeRepository.createChallengeStatus(challengeId, { state: ChallengeState, reason });
+      await this.challengeRepository.createChallengeStatus(challengeId, {
+        state: ChallengeState,
+        reason,
+      });
     }
 
     if (Object.keys(core).length > 0) {

@@ -48,3 +48,22 @@ export class ChallengeRepository {
       data: { challengeId, state, reason },
     });
   };
+  // 추가: 상태 포함 단건 조회
+  findChallengeViewById = async (challengeId) => {
+    return prisma.challenge.findUnique({
+      where: { id: challengeId },
+      include: {
+        ChallengeStatusManage: {
+          select: { state: true, updatedAt: true, reason: true },
+        },
+      },
+    });
+  };
+
+  // 추가: 상태 변경 이력 추가
+  createChallengeStatus = async (challengeId, { state, reason }) => {
+    return prisma.challengeStatusManage.create({
+      data: { challengeId, state, reason },
+    });
+  };
+}
