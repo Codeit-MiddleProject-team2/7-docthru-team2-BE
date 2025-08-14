@@ -59,8 +59,18 @@ export class ChallengeService {
 }
 const repo = new ChallengeRepository();
 export async function getChallenges({ page = 1, pageSize = 5, q, category, type, state } = {}) {
+}
+// services/challenge.js
+import { ChallengeRepository } from "../repositories/challenge.js";
+
+export class ChallengeService {
+  challengeRepository = new ChallengeRepository();
+
+  //  페이지네이션/검색/필터 지원
+  findAllChallenges = async ({ page = 1, pageSize = 5, q, category, type, state } = {}) => {
+    // where 구성
     const where = {
-      ...(q && { title: { contains: q, mode: 'insensitive' } }),
+      ...(q && { title: { contains: String(q), mode: 'insensitive' } }),
       ...(type && { docType: type }),
       ...(state && { status: state }),
       ...(Array.isArray(category) && category.length ? { category: { in: category } } : {}),
@@ -71,11 +81,27 @@ export async function getChallenges({ page = 1, pageSize = 5, q, category, type,
   
     const { items, total } = await repo.findAllChallenges({ skip, take, where });
   
+
+    // page/pageSize → skip/take
+    const take = Math.max(1, Number(pageSize) || 5);
+    const pageNum = Math.max(1, Number(page) || 1);
+    const skip = (pageNum - 1) * take;
+
+    // 레포지토리 호출
+    const { items, total } = await this.challengeRepository.findAllChallenges({ skip, take, where });
+
+    // 프론트가 바로 쓰기 좋은 형태로 반환
     return {
       challenges: items,
-      page: Number(page),
+      page: pageNum,
       pageSize: take,
       totalCount: total,
       totalPages: Math.max(1, Math.ceil(total / take)),
     };
 }
+  };
+
+  findChallengeById = async (challengeId) => {
+    return this.challengeRepository.findChallengeById(challengeId);
+  };
+
