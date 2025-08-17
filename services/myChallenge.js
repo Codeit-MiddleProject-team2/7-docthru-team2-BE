@@ -14,7 +14,7 @@ export async function getMyChallenges({
 
   // 검색 및 필터 구성 요소
   const filters = {
-    userId,
+    userId: userId || null,
     status: status || null,
     keyword: keyword || null,
     offset,

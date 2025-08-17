@@ -10,7 +10,7 @@ export const findMyChallenges = async ({
   limit,
 }) => {
   const where = {
-    userId: userId,
+    ...(userId && { userId }),
     ...(status && {
       ChallengeStatusManage: {
         is: {
@@ -41,7 +41,7 @@ export const findMyChallenges = async ({
 // 조건에 맞는 전체 개수 조회
 export const countMyChallenges = async ({ userId, status, keyword }) => {
   const where = {
-    userId: userId,
+    ...(userId && { userId }),
     ...(status && {
       ChallengeStatusManage: {
         is: {
