@@ -8,14 +8,3 @@ export const createTranslation = async (data) => {
     data,
   });
 };
-
-// 챌린지ID, 사용자ID로 임시 저장 글
-export const findTemporaryStorage = async (challengeId, userId) => {
-  return await prisma.translation.findFirst({
-    where: {
-      challengeId,
-      userId,
-      isSubmitted: false,
-    },
-  });
-};
