@@ -23,9 +23,16 @@ export class ChallengeRepository {
   };
 
   updateChallenge = async (challengeId, updateData) => {
-    return prisma.challenge.update({
+    return await prisma.challenge.update({
       where: { id: challengeId },
       data: updateData,
+      include: {
+        ChallengeStatusManage: {
+          select: { state: true, updatedAt: true, reason: true },
+          orderBy: { updatedAt: "desc" },
+          take: 1,
+        },
+      },
     });
   };
 
