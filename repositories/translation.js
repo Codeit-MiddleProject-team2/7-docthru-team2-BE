@@ -140,7 +140,7 @@ export const findBestTranslations = async (challengeId) => {
   SELECT
     t.id,
     t.content,
-    t.submittedAt,
+    t."submittedAt",
     u.id AS "userId",
     u.nickname,
     u.img,
