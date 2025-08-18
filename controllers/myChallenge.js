@@ -1,17 +1,16 @@
-import express from "express";
 import { getMyChallenges } from "../services/myChallenge.js";
 
 export const myChallengesApply = async (req, res, next) => {
   const userId = req.user.id;
   const userIsAdmin = req.user.isAdmin;
-  console.log("userId---" + userId);
-  console.log("userIsAdmin---" + userIsAdmin);
 
-  const { status, keyword } = req.query;
+  let { status, keyword, orderBy } = req.query;
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
 
-  if (status) {
+  if (orderBy && orderBy !== "latest") {
+    status = null;
+  } else if (status) {
     status = status.toUpperCase();
   }
 
@@ -23,6 +22,7 @@ export const myChallengesApply = async (req, res, next) => {
         keyword,
         page: Number(page),
         limit: Number(limit),
+        orderBy,
       });
     } else {
       result = await getMyChallenges({
@@ -31,6 +31,7 @@ export const myChallengesApply = async (req, res, next) => {
         keyword,
         page: Number(page),
         limit: Number(limit),
+        orderBy,
       });
     }
 

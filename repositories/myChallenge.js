@@ -8,6 +8,7 @@ export const findMyChallenges = async ({
   keyword,
   offset,
   limit,
+  orderBy,
 }) => {
   const where = {
     ...(userId && { userId }),
@@ -23,6 +24,16 @@ export const findMyChallenges = async ({
     }),
   };
 
+  let orderQuery = { createdAt: "desc" };
+  // 기본적으로 생성일 기준 최신순
+  if (orderBy === "oldest") {
+    orderQuery = { createdAt: "asc" };
+  } else if (orderBy === "deadlineOldest") {
+    orderQuery = { dueDate: "asc" };
+  } else if (orderBy === "deadlineLatest") {
+    orderQuery = { dueDate: "desc" };
+  }
+
   return await prisma.challenge.findMany({
     where,
     include: {
@@ -34,7 +45,7 @@ export const findMyChallenges = async ({
     },
     skip: Number(offset) || 0,
     take: Number(limit) || 10,
-    orderBy: { createdAt: "desc" },
+    orderBy: orderQuery,
   });
 };
 

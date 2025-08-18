@@ -1,7 +1,4 @@
-import {
-  findTemporaryStorage,
-  createTranslation,
-} from "../repositories/translation.js";
+import { createTranslation } from "../repositories/translation.js";
 
 export async function postTranslation({
   challengeId,
