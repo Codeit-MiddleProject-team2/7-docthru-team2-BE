@@ -7,6 +7,7 @@ import {
 
 const router = express.Router();
 
+router.get("/best", findAllTranslations);
 router.get("/temporary", findAllTranslations);
 // 목록: 특정 challengeId의 번역들 페이지네이션
 router.get("/", translationController.listByChallenge);
