@@ -1,4 +1,8 @@
-import { translationRepository } from "../repositories/translation.js";
+import {
+  translationRepository,
+  createTranslation,
+  findAllTranslations,
+} from "../repositories/translation.js";
 
 export const translationService = {
   async listByChallenge({ challengeId, page, limit }) {
@@ -32,3 +36,22 @@ export const translationService = {
     return translationRepository.update({ id, content, isSubmitted });
   },
 };
+
+export const getAllTranslations = async (query) => {
+  return await findAllTranslations(query);
+};
+
+export async function postTranslation({
+  challengeId,
+  userId,
+  content,
+  isSubmitted,
+}) {
+  return await createTranslation({
+    challengeId,
+    userId,
+    content,
+    isSubmitted,
+    submittedAt: isSubmitted ? new Date() : null,
+  });
+}

@@ -59,3 +59,38 @@ export const translationRepository = {
     return prisma.translation.update({ where: { id }, data });
   },
 };
+// 특정 챌린지에 속하는 작업물 목록 조회
+export const findAllTranslations = async ({ challengeId, page = 1 }) => {
+  const limit = 5;
+  const offset = (page - 1) * 5;
+
+  const rawResult = await prisma.$queryRaw`
+  SELECT
+    t.id,
+    u.id AS "userId",
+    u.nickname,
+    u.img,
+    COUNT(h.id) AS hearts_count
+  FROM "Translation" t
+  JOIN "User" u ON t."userId" = u.id
+  LEFT JOIN "Hearts" h ON h."translationId" = t.id
+  WHERE t."challengeId" = ${challengeId} AND t."isSubmitted" = ${true}
+  GROUP BY t.id, u.id
+  ORDER BY hearts_count DESC
+  LIMIT ${limit} OFFSET ${offset}
+  `;
+
+  const result = rawResult.map((row) => ({
+    ...row,
+    hearts_count: Number(row.hearts_count),
+  }));
+
+  return result;
+};
+
+// 번역 작업 생성
+export const createTranslation = async (data) => {
+  return await prisma.translation.create({
+    data,
+  });
+};
