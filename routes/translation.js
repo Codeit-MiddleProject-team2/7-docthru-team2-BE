@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  createTranslation,
   findAllTranslations,
   translationController,
 } from "../controllers/translation.js";
@@ -20,6 +19,5 @@ router.post("/create", translationController.createTranslation);
 router.patch("/:id", translationController.update);
 
 router.get("/temporary", findAllTranslations);
-router.post("/create", createTranslation);
 
 export default router;
