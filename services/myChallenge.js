@@ -9,6 +9,7 @@ export async function getMyChallenges({
   keyword,
   page = 1,
   limit = 10,
+  orderBy,
 }) {
   const offset = (page - 1) * limit;
 
@@ -19,6 +20,7 @@ export async function getMyChallenges({
     keyword: keyword || null,
     offset,
     limit,
+    orderBy,
   };
   const challenges = await findMyChallenges(filters);
 
