@@ -26,6 +26,6 @@ app.use("/translation", translationRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/hearts", heartsRouter);
 // 서버 실행
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 //지금 읽힌 값 화인
 app.listen(PORT, () => console.log(`Server on :${PORT}`));
