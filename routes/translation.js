@@ -9,7 +9,6 @@ import { verifyTranslationAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/best", findAllTranslations);
 router.get("/temporary", findAllTranslations);
 router.get("/best", findBestTranslations);
 // 목록: 특정 challengeId의 번역들 페이지네이션
