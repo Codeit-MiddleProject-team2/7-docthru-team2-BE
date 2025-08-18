@@ -115,6 +115,7 @@ export const findAllTranslations = async ({ challengeId, page = 1 }) => {
     u.id AS "userId",
     u.nickname,
     u.img,
+    u."userLevel",
     COUNT(h.id) AS hearts_count
   FROM "Translation" t
   JOIN "User" u ON t."userId" = u.id
