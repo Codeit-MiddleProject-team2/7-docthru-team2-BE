@@ -26,7 +26,7 @@ export const loginUser = async (req, res) => {
       return res.status(404).json({ error: "login 리퀘스트 데이터 확인 필요" });
     }
     const accessToken = createToken(user);
-    return res.json({ accessToken });
+    return res.json({ accessToken, user });
   } catch (e) {
     console.error("❌ [loginUser] error:", e);
     res.status(500).json({ error: `${e}` });
