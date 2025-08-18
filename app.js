@@ -5,6 +5,7 @@ import myChallengeRouter from "./routes/myChallenge.js";
 import userRouter from "./routes/user.js";
 import challengeRouter from "./routes/challenge.js";
 import feedbackRouter from "./routes/feedback.js";
+import translationRouter from "./routes/translation.js";
 import passport from "./config/passport.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use("/mychallenge/apply", myChallengeRouter);
 app.use("/user", userRouter);
 app.use("/challenge", challengeRouter);
 app.use("/feedback", feedbackRouter);
+app.use("/translation", translationRouter);
 
 // 서버 실행
 const PORT = 5000;
