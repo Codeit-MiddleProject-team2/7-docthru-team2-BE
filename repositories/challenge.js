@@ -56,6 +56,14 @@ export class ChallengeRepository {
         ChallengeStatusManage: {
           select: { state: true, updatedAt: true, reason: true },
         },
+        _count: {
+          select: {
+            Translation: { where: { challengeId, isSubmitted: true } },
+          },
+        },
+        user: {
+          select: { id: true, nickname: true, userLevel: true, img: true },
+        },
       },
     });
   };
