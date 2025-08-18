@@ -7,6 +7,8 @@ import challengeRouter from "./routes/challenge.js";
 import feedbackRouter from "./routes/feedback.js";
 import translationRouter from "./routes/translation.js";
 import passport from "./config/passport.js";
+import heartsRouter from "./routes/hearts.js";
+import translationRouter from "./routes/translation.js";
 
 dotenv.config();
 
@@ -23,6 +25,9 @@ app.use("/challenge", challengeRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/translation", translationRouter);
 
+app.use("/translation", translationRouter);
+app.use("/feedback", feedbackRouter);
+app.use("/hearts", heartsRouter);
 // 서버 실행
 const PORT = 5000;
 //지금 읽힌 값 화인
