@@ -5,7 +5,7 @@ export class ChallengeController {
 
   getAllChallenges = async (req, res, next) => {
     try {
-      const challenges = await this.challengeService.findAllChallenges();
+      const challenges = await this.challengeService.findAllChallenges(req.query);
       return res.status(200).json({ data: challenges });
     } catch (error) {
       next(error);
