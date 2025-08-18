@@ -1,5 +1,3 @@
-import { createTranslation } from "../repositories/translation.js";
-
 import { translationRepository } from "../repositories/translation.js";
 
 export const translationService = {
@@ -17,7 +15,7 @@ export const translationService = {
   },
 
   async postTranslation({ challengeId, userId, content, isSubmitted }) {
-    return await createTranslation({
+    return await translationRepository.createTranslation({
       challengeId,
       userId,
       content,

@@ -1,31 +1,6 @@
 import express from "express";
 import { translationService } from "../services/translation.js";
 
-export const createTranslation = async (req, res, next) => {
-  try {
-    const { challengeId, userId, content, isSubmitted } = req.body;
-
-    // 필수 데이터 유효성 검사
-    if (!challengeId || !userId || !content) {
-      return res
-        .status(400)
-        .json({ message: "챌린지 ID, 사용자 ID, 내용이 필요합니다." });
-    }
-
-    const result = await translationService.postTranslation({
-      challengeId,
-      userId,
-      content,
-      isSubmitted,
-    });
-
-    res.status(201).json(result);
-    console.log("생성 또는 업데이트된 데이터:", result);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const translationController = {
   async listByChallenge(req, res, next) {
     try {
@@ -62,28 +37,28 @@ export const translationController = {
     }
   },
 
-  async create(req, res, next) {
+  async createTranslation(req, res, next) {
     try {
-      const {
-        challengeId,
-        userId,
-        content = "",
-        isSubmitted = false,
-      } = req.body || {};
-      if (!challengeId || !userId) {
+      const { challengeId, userId, content, isSubmitted } = req.body;
+
+      // 필수 데이터 유효성 검사
+      if (!challengeId || !userId || !content) {
         return res
           .status(400)
-          .json({ message: "challengeId and userId are required" });
+          .json({ message: "챌린지 ID, 사용자 ID, 내용이 필요합니다." });
       }
-      const created = await translationService.create({
+
+      const result = await translationService.postTranslation({
         challengeId,
         userId,
         content,
         isSubmitted,
       });
-      return res.status(201).json(created);
-    } catch (e) {
-      return next(e);
+
+      res.status(201).json(result);
+      console.log("생성 또는 업데이트된 데이터:", result);
+    } catch (error) {
+      next(error);
     }
   },
 

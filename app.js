@@ -8,7 +8,6 @@ import feedbackRouter from "./routes/feedback.js";
 import translationRouter from "./routes/translation.js";
 import passport from "./config/passport.js";
 import heartsRouter from "./routes/hearts.js";
-import translationRouter from "./routes/translation.js";
 
 dotenv.config();
 
@@ -23,8 +22,6 @@ app.use("/mychallenge/apply", myChallengeRouter);
 app.use("/user", userRouter);
 app.use("/challenge", challengeRouter);
 app.use("/feedback", feedbackRouter);
-app.use("/translation", translationRouter);
-
 app.use("/translation", translationRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/hearts", heartsRouter);
