@@ -15,7 +15,8 @@ router.get("/", feedbackController.list);
  */
 router.patch(
   "/:id",
-  passport.authenticate("access-token", { session: false }),
+  authLoginMiddleware,
+  verifyFeedbackAuth,
   feedbackController.update
 );
 
@@ -25,12 +26,5 @@ router.patch(
  * - 작성자: reason 선택(모달 입력값 그대로 전달)
  */
 router.delete("/:id", authLoginMiddleware, feedbackController.remove);
-// 수정
-router.patch(
-  "/:id",
-  authLoginMiddleware,
-  verifyFeedbackAuth,
-  feedbackController.update
-);
 
 export default router;
