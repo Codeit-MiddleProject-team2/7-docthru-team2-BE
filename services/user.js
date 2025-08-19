@@ -11,10 +11,12 @@ async function hashingPassword(password) {
   return bcrypt.hash(password, 10);
 }
 
-// 토큰 생성 함수
-export function createToken(user) {
+// 토큰 생성 함수 (리프레쉬 기능 추가. type이 true라면 리프레쉬 발급.)
+export function createToken(user, type = false) {
   const payload = { userId: user.id };
-  const options = { expiresIn: "1h" };
+  const options = {
+    expiresIn: type ? "2w" : "1h",
+  };
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 }
 
@@ -35,8 +37,8 @@ export const createUser = async (user) => {
 
   const hassedPassword = await hashingPassword(user.password);
   const newUser = await postUser({ ...user, password: hassedPassword });
-  const { password, ...rest } = newUser;
-  return rest;
+  const safeUser = filterSensitiveUserData(newUser);
+  return safeUser;
 };
 
 // 로그인
@@ -50,14 +52,14 @@ export const getUser = async (email, password) => {
   // 비밀번호 해싱해서 일치하는지 확인
   const isValid = await bcrypt.compare(password, user.password);
   if (isValid) {
-    const { password, ...rest } = user;
-    return rest;
+    const safeUser = filterSensitiveUserData(user);
+    return safeUser;
   } else {
     noUserError();
   }
 };
 
-// id로 유저 찾기
+// id로 유저 찾기. 그리고 해당 id의 유저 정보 반환.
 export const getUserById = async (id) => {
   const user = await findUserById(id);
 
@@ -65,12 +67,19 @@ export const getUserById = async (id) => {
     noUserError();
   }
 
-  const { password, ...rest } = user;
-  return rest;
+  const safeUser = filterSensitiveUserData(user);
+  return safeUser;
 };
 
+// 사용자 없을 때 에러
 const noUserError = () => {
   const error = new Error("입력된 정보와 일치하는 사용자가 존재하지 않습니다.");
   error.code = 401;
   throw error;
 };
+
+// 민감한 정보 필터링
+function filterSensitiveUserData(user) {
+  const { password, refreshToken, ...rest } = user;
+  return rest;
+}

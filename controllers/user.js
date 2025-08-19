@@ -1,3 +1,4 @@
+import { updateUser } from "../repositories/user.js";
 import { createToken, createUser, getUser } from "../services/user.js";
 
 // 회원가입
@@ -10,7 +11,10 @@ export const signupUser = async (req, res) => {
         .status(404)
         .json({ error: "signup 리퀘스트 데이터 확인 필요" });
     }
-    res.status(200).json(user);
+    const accessToken = createToken(user);
+    const refreshToken = createToken(user, true);
+    await updateUser(user.id, { refreshToken });
+    return res.json({ accessToken, refreshToken, user });
   } catch (e) {
     console.error("❌ [signupUser] error:", e);
     res.status(500).json({ error: `${e}` });
@@ -26,7 +30,9 @@ export const loginUser = async (req, res) => {
       return res.status(404).json({ error: "login 리퀘스트 데이터 확인 필요" });
     }
     const accessToken = createToken(user);
-    return res.json({ accessToken, user });
+    const refreshToken = createToken(user, true);
+    await updateUser(user.id, { refreshToken });
+    return res.json({ accessToken, refreshToken, user });
   } catch (e) {
     console.error("❌ [loginUser] error:", e);
     res.status(500).json({ error: `${e}` });
