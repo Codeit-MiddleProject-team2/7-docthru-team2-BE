@@ -14,5 +14,6 @@ router.get("/:challengeId", challengesController.getChallengeById);
 router.patch("/:challengeId", challengesController.updateChallenge);
 
 router.get("/:challengeId/view", challengesController.getChallengeViewById);
+router.patch("/:challengeId/view", challengesController.updateChallengeWithStatus);
 
 export default router;

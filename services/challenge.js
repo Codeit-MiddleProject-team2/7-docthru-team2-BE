@@ -37,19 +37,25 @@ export class ChallengeService {
   };
 
   updateChallenge = async (challengeId, updateData) => {
-    return this.challengeRepository.updateChallenge(challengeId, updateData);
+    return await this.challengeRepository.updateChallenge(challengeId, updateData);
   };
 
   getChallengeViewById = async (challengeId) => {
     const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
-    if (!challenge) return null;
+
+    if (!challenge) {
+      return null;
+    }
 
     const { ChallengeStatusManage, ...rest } = challenge;
+    const latestStatus =
+      Array.isArray(ChallengeStatusManage) && ChallengeStatusManage.length > 0 ? ChallengeStatusManage[0] : null;
+
     return {
       ...rest,
-      challengeState: ChallengeStatusManage.state,
-      updatedAt: ChallengeStatusManage.updatedAt ?? challenge.updatedAt,
-      reason: ChallengeStatusManage.reason ?? null,
+      challengeState: latestStatus?.state ?? null,
+      updatedAt: latestStatus?.updatedAt ?? challenge.updatedAt,
+      reason: latestStatus?.reason ?? null,
     };
   };
 

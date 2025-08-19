@@ -42,9 +42,9 @@ export class ChallengeRepository {
       where: { id: challengeId },
       include: {
         ChallengeStatusManage: {
+          select: { state: true, updatedAt: true, reason: true },
           orderBy: { updatedAt: "desc" },
           take: 1,
-          select: { id: true, state: true, updatedAt: true, reason: true },
         },
         _count: {
           select: {
