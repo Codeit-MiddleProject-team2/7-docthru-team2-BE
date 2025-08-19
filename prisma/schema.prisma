@@ -28,7 +28,7 @@ model User {
 }
 
 model Challenge {
-  id          String        @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
   description String
   url         String
@@ -36,12 +36,30 @@ model Challenge {
   type        String
   dueDate     DateTime
   maximum     Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  user        User          @relation(fields: [userId], references: [id])
-  userId      String
-  isAdmitted  String
-  Translation Translation[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user                  User                    @relation(fields: [userId], references: [id])
+  userId                String
+  Translation           Translation[]
+  ChallengeStatusManage ChallengeStatusManage[]
+}
+
+model ChallengeStatusManage {
+  id        String         @id @default(uuid())
+  state     ChallengeState @default(PENDING)
+  reason    String?
+  updatedAt DateTime       @updatedAt
+
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  challengeId String
+}
+
+enum ChallengeState {
+  PENDING
+  ACCEPTED
+  REJECTED
+  DELETED
 }
 
 model Translation {
