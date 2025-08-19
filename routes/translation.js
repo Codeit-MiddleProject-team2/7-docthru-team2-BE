@@ -35,4 +35,16 @@ router.put(
   translationController.updateTranslation
 );
 
+router.get(
+  "/:challengeId/drafts",
+  passport.authenticate("access-token", { session: false }),
+  translationController.getDrafts
+);
+
+router.delete(
+  "/:challengeId",
+  passport.authenticate("access-token", { session: false }),
+  translationController.deleteByChallenge
+);
+
 export default router;

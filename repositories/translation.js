@@ -102,6 +102,35 @@ export const translationRepository = {
       },
     });
   },
+
+  findDraftsByChallengeAndUser(challengeId, userId) {
+    return prisma.translation.findMany({
+      where: {
+        challengeId,
+        userId,
+        isSubmitted: false,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      include: {
+        challenge: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+  },
+
+  deleteByChallenge(challengeId, userId) {
+    return prisma.translation.deleteMany({
+      where: {
+        challengeId,
+        userId,
+      },
+    });
+  },
 };
 
 // 특정 챌린지에 속하는 작업물 목록 조회
