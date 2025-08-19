@@ -1,9 +1,15 @@
 import express from "express";
-import { loginUser, signupUser } from "../controllers/user.js";
+import {
+  loginUser,
+  refreshAccessToken,
+  signupUser,
+} from "../controllers/user.js";
+import { authRefreshMiddleware } from "../config/passport.js";
 
 const router = express.Router();
 
+router.post("/token/refresh", authRefreshMiddleware, refreshAccessToken);
+router.post("/signup", signupUser);
 router.post("/", loginUser);
-router.post("/", signupUser);
 
 export default router;

@@ -24,3 +24,11 @@ export const postUser = async (data) => {
     data,
   });
 };
+
+// 유저 데이터 업데이터
+export const updateUser = async (id, data) => {
+  return prisma.user.update({
+    where: { id },
+    data,
+  });
+};
