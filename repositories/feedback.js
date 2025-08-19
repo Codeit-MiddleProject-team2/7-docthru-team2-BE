@@ -42,4 +42,8 @@ export const feedbackRepository = {
   update({ id, content }) {
     return prisma.feedback.update({ where: { id }, data: { content } });
   },
+
+  remove({ id }) {
+    return prisma.feedback.delete({ where: { id } });
+  },
 };

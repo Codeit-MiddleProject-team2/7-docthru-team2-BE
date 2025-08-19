@@ -1,0 +1,31 @@
+@base = http://localhost:5000
+
+@ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzU1NTg4NzUyLCJleHAiOjE3NTU1OTIzNTJ9.uWv6-h9tdhZR_5UoIlYLYZGqy_yYmtOi97E94ahfJCw
+@feedbackId = 9df129bf-cdac-4356-8f63-eefd24212171
+@userId = 1
+
+
+
+
+### 작성자(=자기 자신) 삭제 케이스
+DELETE http://localhost:5000/feedback/{{feedbackId}}
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "data": {
+    "userId": {{userId}},
+    "reason": "작성자 삭제 테스트"
+  }
+}
+
+### 관리자 삭제 케이스(상대방 피드백)
+DELETE http://localhost:5000/feedback/{{feedbackId}}
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "data": {
+    "reason": "관리자 삭제 테스트"
+  }
+}
