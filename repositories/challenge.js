@@ -6,15 +6,23 @@ export class ChallengeRepository {
   findAllChallenges = async ({
     page = 1,
     pageSize = 5,
-    q,
+    searchQuery,
+    sort,
     category,
     type,
     state = {},
   }) => {
     const whereClause = {
-      ...(q && { title: { contains: String(q), mode: "insensitive" } }),
+      ...(searchQuery && {
+        title: { contains: String(searchQuery), mode: "insensitive" },
+      }),
       ...(category && { category }),
     };
+
+    // const sortOption = sort === "latest" ? : sort === "deadline" ?
+
+    const sortOption =
+      sort === "deadline" ? { dueDate: "asc" } : { createdAt: "desc" };
 
     const numPage = parseInt(page);
     const numPageSize = parseInt(pageSize);
@@ -22,7 +30,7 @@ export class ChallengeRepository {
     const [items, total] = await Promise.all([
       prisma.challenge.findMany({
         where: whereClause,
-        orderBy: { createdAt: "desc" },
+        orderBy: sortOption,
         skip: (numPage - 1) * numPageSize,
         take: numPageSize,
       }),
