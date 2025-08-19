@@ -4,15 +4,11 @@ import {
   refreshAccessToken,
   signupUser,
 } from "../controllers/user.js";
-import passport from "../config/passport.js";
+import { authRefreshMiddleware } from "../config/passport.js";
 
 const router = express.Router();
 
-router.post(
-  "/token/refresh",
-  passport.authenticate("refresh-token", { session: false }),
-  refreshAccessToken
-);
+router.post("/token/refresh", authRefreshMiddleware, refreshAccessToken);
 router.post("/signup", signupUser);
 router.post("/", loginUser);
 

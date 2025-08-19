@@ -1,10 +1,11 @@
 import express from "express";
-import passport from "../config/passport.js";
+import { authLoginMiddleware } from "../config/passport.js";
 import {
   findAllTranslations,
   findBestTranslations,
   translationController,
 } from "../controllers/translation.js";
+import { verifyTranslationAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -19,21 +20,18 @@ router.get("/:id", translationController.getById);
 // 생성 전 데이터 확인
 router.get(
   "/:challengeId/edit",
-  passport.authenticate("access-token", { session: false }),
+  authLoginMiddleware,
   translationController.getTranslationByChallengeId
 );
 
 // 생성
-router.post(
-  "/",
-  passport.authenticate("access-token", { session: false }),
-  translationController.createTranslation
-);
+router.post("/", authLoginMiddleware, translationController.createTranslation);
 
 // 수정
 router.put(
   "/:id",
-  passport.authenticate("access-token", { session: false }),
+  authLoginMiddleware,
+  verifyTranslationAuth,
   translationController.updateTranslation
 );
 

@@ -1,16 +1,12 @@
 import express from "express";
-import passport from "../config/passport.js";
 import { postFeedback } from "../controllers/feedback.js";
-import { Router } from "express";
 import { feedbackController } from "../controllers/feedback.js";
+import { authLoginMiddleware } from "../config/passport.js";
+import { verifyFeedbackAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post(
-  "/",
-  passport.authenticate("access-token", { session: false }),
-  postFeedback
-);
+router.post("/", authLoginMiddleware, postFeedback);
 
 router.get("/", feedbackController.list);
 
@@ -28,10 +24,13 @@ router.patch(
  * - 관리자: reason(사유) 필수
  * - 작성자: reason 선택(모달 입력값 그대로 전달)
  */
-router.delete(
+router.delete("/:id", authLoginMiddleware, feedbackController.remove);
+// 수정
+router.patch(
   "/:id",
-  passport.authenticate("access-token", { session: false }),
-  feedbackController.remove
+  authLoginMiddleware,
+  verifyFeedbackAuth,
+  feedbackController.update
 );
 
 export default router;
