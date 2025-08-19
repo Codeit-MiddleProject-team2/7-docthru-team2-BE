@@ -1,6 +1,5 @@
 import {
   translationRepository,
-  createTranslation,
   findAllTranslations,
 } from "../repositories/translation.js";
 
@@ -18,40 +17,54 @@ export const translationService = {
     return translationRepository.findByIdWithRelations(id);
   },
 
-  async postTranslation({ challengeId, userId, content, isSubmitted }) {
-    return await translationRepository.createTranslation({
-      challengeId,
-      userId,
-      content,
-      isSubmitted,
-      submittedAt: isSubmitted ? new Date() : null,
-    });
+  async findTranslation(challengeId, userId) {
+    // 1. isSubmitted = true인 최종 제출된 번역물이 있는지 먼저 확인
+    const submittedTranslation =
+      await translationRepository.findSubmittedByChallengeAndUser(
+        challengeId,
+        userId
+      );
+    if (submittedTranslation) {
+      return submittedTranslation;
+    }
+
+    // 2. 제출된 번역물이 없으면, isSubmitted = false인 임시 저장된 번역물 중 가장 최신 데이터를 조회
+    const draftTranslation =
+      await translationRepository.findLatestDraftByChallengeAndUser(
+        challengeId,
+        userId
+      );
+    if (draftTranslation) {
+      return draftTranslation;
+    }
+
+    // 3. 둘 다 없으면 null 반환
+    return null;
   },
 
-  async update({ id, userId, isAdmin, content, isSubmitted }) {
-    const t = await translationRepository.findById(id);
-    if (!t) throw { status: 404, message: "Translation not found" };
-    if (t.userId !== userId && !isAdmin)
-      throw { status: 403, message: "Forbidden" };
-    return translationRepository.update({ id, content, isSubmitted });
+  // 생성
+  async create(data) {
+    return translationRepository.create(data);
+  },
+
+  // 수정
+  async update(translationId, data, userId) {
+    const existingTranslation = await translationRepository.findById(
+      translationId
+    );
+
+    if (!existingTranslation) {
+      return null;
+    }
+
+    if (existingTranslation.userId !== userId) {
+      throw new Error("수정 권한이 없습니다.");
+    }
+
+    return await translationRepository.update(translationId, data);
   },
 };
 
 export const getAllTranslations = async (query) => {
   return await findAllTranslations(query);
 };
-
-export async function postTranslation({
-  challengeId,
-  userId,
-  content,
-  isSubmitted,
-}) {
-  return await createTranslation({
-    challengeId,
-    userId,
-    content,
-    isSubmitted,
-    submittedAt: isSubmitted ? new Date() : null,
-  });
-}
