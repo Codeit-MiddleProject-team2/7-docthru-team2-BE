@@ -4,11 +4,12 @@ export class ChallengeController {
   challengeService = new ChallengeService();
 
   getAllChallenges = async (req, res, next) => {
+    console.log(req.query);
     try {
       const challenges = await this.challengeService.findAllChallenges(
         req.query
       );
-      return res.status(200).json({ data: challenges });
+      return res.status(200).json(challenges);
     } catch (error) {
       next(error);
     }

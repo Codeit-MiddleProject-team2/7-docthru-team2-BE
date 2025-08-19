@@ -4,44 +4,21 @@ import { ChallengeRepository } from "../repositories/challenge.js";
 export class ChallengeService {
   challengeRepository = new ChallengeRepository();
 
-  // 목록 조회: 페이지네이션 + 검색(q) + 필터(category/type/state)
-  findAllChallenges = async ({
-    page = 1,
-    pageSize = 5,
-    q,
-    category,
-    type,
-    state,
-  } = {}) => {
-    // Prisma where 구성
-    const where = {
-      ...(q && { title: { contains: String(q), mode: "insensitive" } }),
-      ...(type && { ype: type }),
-      ...(state && { state: state }),
-      ...(Array.isArray(category) && category.length
-        ? { category: { in: category } }
-        : {}),
-    };
-
-    // page/pageSize → skip/take 계산
-    const take = Math.max(1, Number(pageSize) || 5);
-    const pageNum = Math.max(1, Number(page) || 1);
-    const skip = (pageNum - 1) * take;
-
-    // 레포지토리 호출 (쿼리 전담)
-    const { items, total } = await this.challengeRepository.findAllChallenges({
-      skip,
-      take,
-      where,
-    });
+  findAllChallenges = async (query) => {
+    const {
+      items,
+      total,
+      numPage: page,
+      numPageSize: pageSize,
+    } = await this.challengeRepository.findAllChallenges(query);
 
     // 프론트가 바로 쓰기 좋은 형태로 반환
     return {
       challenges: items,
-      page: pageNum,
-      pageSize: take,
+      page,
+      pageSize,
       totalCount: total,
-      totalPages: Math.max(1, Math.ceil(total / take)),
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
     };
   };
 

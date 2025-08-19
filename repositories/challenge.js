@@ -3,17 +3,32 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class ChallengeRepository {
-  findAllChallenges = async ({ skip = 0, take = 5, where = {} } = {}) => {
+  findAllChallenges = async ({
+    page = 1,
+    pageSize = 5,
+    q,
+    category,
+    type,
+    state = {},
+  }) => {
+    const whereClause = {
+      ...(q && { title: { contains: String(q), mode: "insensitive" } }),
+      ...(category && { category }),
+    };
+
+    const numPage = parseInt(page);
+    const numPageSize = parseInt(pageSize);
+
     const [items, total] = await Promise.all([
       prisma.challenge.findMany({
-        where,
+        where: whereClause,
         orderBy: { createdAt: "desc" },
-        skip,
-        take,
+        skip: (numPage - 1) * numPageSize,
+        take: numPageSize,
       }),
-      prisma.challenge.count({ where }),
+      prisma.challenge.count({ where: whereClause }),
     ]);
-    return { items, total };
+    return { items, total, numPage, numPageSize };
   };
 
   updateChallenge = async (challengeId, updateData) => {
