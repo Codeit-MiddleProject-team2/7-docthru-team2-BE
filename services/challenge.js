@@ -87,5 +87,13 @@ export class ChallengeService {
       throw new Error("챌린지를 찾을 수 없습니다.");
     }
     return this.challengeRepository.createStatus(challengeId, state, reason);
+  getCategorys = async (keyword) => {
+    const rawCategorys = await this.challengeRepository.getCategorys(keyword);
+    let num = 0;
+    const result = rawCategorys.map((raw, index) => ({
+      key: index + 1,
+      name: raw.category,
+    }));
+    return result;
   };
 }

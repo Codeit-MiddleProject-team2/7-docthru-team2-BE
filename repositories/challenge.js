@@ -77,5 +77,14 @@ export class ChallengeRepository {
     return prisma.challengeStatusManage.create({
       data: { challengeId, state, reason },
     });
+  getCategorys = async (keyword = "") => {
+    return await prisma.$queryRaw`
+    SELECT c.category 
+    FROM "Challenge" c
+    WHERE c.category ILIKE '%' || ${keyword} || '%'
+    GROUP BY c.category
+    ORDER BY COUNT(*) DESC
+    LIMIT 5;
+  `;
   };
 }

@@ -88,6 +88,14 @@ export class ChallengeController {
       });
     } catch (err) {
       next(err);
+  getCategorys = async (req, res, next) => {
+    const { keyword } = req.query;
+    try {
+      const categorys = await this.challengeService.getCategorys(keyword);
+      return res.status(200).json(categorys);
+    } catch (e) {
+      console.error("❌ [getCategorys] error:", e);
+      res.status(500).json({ error: `${e}` });
     }
   };
 }
