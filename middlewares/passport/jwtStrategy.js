@@ -10,24 +10,18 @@ const accessTokenOptions = {
   secretOrKey: process.env.JWT_SECRET,
 };
 
-// refreshToken은 쿠키의 refreshToken 속성을 통해 전달받는다
-const cookieExtractor = function (req) {
-  var token = null;
-  if (req && req.cookies) {
-    token = req.cookies["refreshToken"];
-  }
-  return token;
-};
-
+// 리프레쉬 토큰은 쿠키로부터 추출
 const refreshTokenOptions = {
-  jwtFromRequest: cookieExtractor,
+  jwtFromRequest: (req) => {
+    return req.cookies.refreshToken;
+  },
   secretOrKey: process.env.JWT_SECRET,
 };
 
 // 콜백 함수
 async function jwtVerify(payload, done) {
   try {
-    const user = await getUserById(payload.userId); // 여기는 다시 작성
+    const user = await getUserById(payload.userId);
     if (!user) {
       return done(null, false);
     }

@@ -1,5 +1,10 @@
-import { updateUser } from "../repositories/user.js";
-import { createToken, createUser, getUser } from "../services/user.js";
+import {
+  createToken,
+  refreshToken,
+  createUser,
+  getUser,
+  patchUser,
+} from "../services/user.js";
 
 // 회원가입
 export const signupUser = async (req, res) => {
@@ -13,8 +18,13 @@ export const signupUser = async (req, res) => {
     }
     const accessToken = createToken(user);
     const refreshToken = createToken(user, true);
-    await updateUser(user.id, { refreshToken });
-    return res.json({ accessToken, refreshToken, user });
+    await patchUser(user.id, { refreshToken });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+    return res.json({ accessToken, user });
   } catch (e) {
     console.error("❌ [signupUser] error:", e);
     res.status(500).json({ error: `${e}` });
@@ -31,10 +41,38 @@ export const loginUser = async (req, res) => {
     }
     const accessToken = createToken(user);
     const refreshToken = createToken(user, true);
-    await updateUser(user.id, { refreshToken });
-    return res.json({ accessToken, refreshToken, user });
+    await patchUser(user.id, { refreshToken });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+    return res.json({ accessToken, user });
   } catch (e) {
     console.error("❌ [loginUser] error:", e);
+    res.status(500).json({ error: `${e}` });
+  }
+};
+
+// 액세스 토큰 재발급
+export const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken: refreshTk } = req.cookies;
+    const userId = req.user.id;
+    const { accessToken, newRefreshToken } = await refreshToken(
+      userId,
+      refreshTk
+    );
+    await patchUser(userId, { refreshToken: newRefreshToken });
+    res.cookie("refreshToken", newRefreshToken, {
+      path: "/token/refresh",
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+    return res.json({ accessToken });
+  } catch (e) {
+    console.error("❌ [refreshToken] error:", e);
     res.status(500).json({ error: `${e}` });
   }
 };

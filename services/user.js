@@ -2,6 +2,7 @@ import {
   findUserByEmail,
   findUserById,
   postUser,
+  updateUser,
 } from "../repositories/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -20,11 +21,21 @@ export function createToken(user, type = false) {
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 }
 
+// 리프레쉬 토큰으로 토큰 재발급
+export async function refreshToken(userId, refreshToken) {
+  const user = await findUserById(userId);
+  if (!user || user.refreshToken !== refreshToken) {
+    const error = new Error("Unauthorized");
+    error.code = 401;
+    throw error;
+  }
+
+  const accessToken = createToken(user);
+  const newRefreshToken = createToken(user, true);
+  return { accessToken, newRefreshToken };
+}
+
 // 회원가입
-// email로 이미 가입된 유저가 있는지 확인
-// 있다면 에러 발생
-// 이미 가입된 유저가 없다면 새로 유저 생성
-// password를 제외한 값 유저 객체 리턴
 export const createUser = async (user) => {
   const existedUser = await findUserByEmail(user.email);
 
@@ -71,6 +82,11 @@ export const getUserById = async (id) => {
   return safeUser;
 };
 
+// 유저 업데이트
+export const patchUser = async (id, data) => {
+  return await updateUser(id, data);
+};
+
 // 사용자 없을 때 에러
 const noUserError = () => {
   const error = new Error("입력된 정보와 일치하는 사용자가 존재하지 않습니다.");
@@ -83,3 +99,11 @@ function filterSensitiveUserData(user) {
   const { password, refreshToken, ...rest } = user;
   return rest;
 }
+
+// export default {
+//   createToken,
+//   refreshToken,
+//   createUser,
+//   getUser,
+//   getUserById,
+// };
