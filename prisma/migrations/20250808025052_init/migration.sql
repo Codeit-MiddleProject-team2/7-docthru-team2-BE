@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "ChallengeState" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED', 'DELETED');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -8,8 +5,8 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "nickname" TEXT NOT NULL,
     "img" TEXT NOT NULL DEFAULT '',
-    "userLevel" TEXT,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "userLevel" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -24,22 +21,13 @@ CREATE TABLE "Challenge" (
     "type" TEXT NOT NULL,
     "dueDate" TIMESTAMP(3) NOT NULL,
     "maximum" INTEGER NOT NULL,
+    "state" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
+    "isAdmitted" TEXT NOT NULL,
 
     CONSTRAINT "Challenge_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ChallengeStatusManage" (
-    "id" TEXT NOT NULL,
-    "state" "ChallengeState" NOT NULL DEFAULT 'PENDING',
-    "reason" TEXT,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "challengeId" TEXT NOT NULL,
-
-    CONSTRAINT "ChallengeStatusManage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -48,8 +36,7 @@ CREATE TABLE "Translation" (
     "challengeId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "isSubmitted" BOOLEAN NOT NULL,
-    "submittedAt" TIMESTAMP(3),
+    "canceled" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -78,17 +65,8 @@ CREATE TABLE "Hearts" (
     CONSTRAINT "Hearts_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "ChallengeStatusManage_challengeId_key" ON "ChallengeStatusManage"("challengeId");
-
 -- AddForeignKey
 ALTER TABLE "Challenge" ADD CONSTRAINT "Challenge_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ChallengeStatusManage" ADD CONSTRAINT "ChallengeStatusManage_challengeId_fkey" FOREIGN KEY ("challengeId") REFERENCES "Challenge"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Translation" ADD CONSTRAINT "Translation_challengeId_fkey" FOREIGN KEY ("challengeId") REFERENCES "Challenge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
