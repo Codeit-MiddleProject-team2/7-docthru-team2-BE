@@ -40,7 +40,9 @@ export class ChallengeRepository {
   };
 
   postChallenge = async (data) => {
-    return await prisma.challenge.create({ data });
+    return await prisma.challenge.create({
+      data: { ...data, maximum: parseInt(data.maximum) },
+    });
   };
 
   updateChallenge = async (challengeId, updateData) => {
