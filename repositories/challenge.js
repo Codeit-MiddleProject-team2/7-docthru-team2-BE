@@ -63,4 +63,10 @@ export class ChallengeRepository {
       data: { challengeId, state, reason }, // id는 String(uuid)
     });
   };
+
+  createStatus = async (challengeId, state, reason = null) => {
+    return prisma.challengeStatusManage.create({
+      data: { challengeId, state, reason },
+    });
+  };
 }
