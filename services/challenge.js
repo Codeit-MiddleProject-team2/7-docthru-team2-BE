@@ -9,8 +9,8 @@ export class ChallengeService {
     // Prisma where 구성
     const where = {
       ...(q && { title: { contains: String(q), mode: "insensitive" } }),
-      ...(type && { docType: type }),
-      ...(state && { status: state }),
+      ...(type && { ype: type }),
+      ...(state && { state: state }),
       ...(Array.isArray(category) && category.length ? { category: { in: category } } : {}),
     };
 
