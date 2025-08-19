@@ -8,7 +8,7 @@ const challengesController = new ChallengeController();
 router.get("/", challengesController.getAllChallenges);
 
 //특정 챌린지 조회
-router.get("/:challengeId", challengesController.getChallengeById);
+router.get("/:challengeId", challengesController.getChallengeViewById);
 
 //챌린지 수정하기 (계속하기)
 router.patch("/:challengeId", challengesController.updateChallengeWithStatus);

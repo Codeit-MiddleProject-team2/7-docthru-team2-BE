@@ -16,12 +16,6 @@ export class ChallengeRepository {
     return { items, total };
   };
 
-  findChallengeById = async (challengeId) => {
-    return prisma.challenge.findUnique({
-      where: { id: challengeId }, // id는 String(uuid)
-    });
-  };
-
   updateChallenge = async (challengeId, updateData) => {
     return await prisma.challenge.update({
       where: { id: challengeId },
