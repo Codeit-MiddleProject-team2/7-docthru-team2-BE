@@ -12,13 +12,26 @@ router.post(
   postFeedback
 );
 
-// 목록(더보기: offset/limit)
 router.get("/", feedbackController.list);
 
-// 생성
-// router.post("/", feedbackController.create);
+/**
+ * PATCH 수정:  인증 미들웨어 추가
+ */
+router.patch(
+  "/:id",
+  passport.authenticate("access-token", { session: false }),
+  feedbackController.update
+);
 
-// 수정
-router.patch("/:id", feedbackController.update);
+/**
+ * DELETE 삭제: 인증 필요 (작성자 또는 관리자만 허용)
+ * - 관리자: reason(사유) 필수
+ * - 작성자: reason 선택(모달 입력값 그대로 전달)
+ */
+router.delete(
+  "/:id",
+  passport.authenticate("access-token", { session: false }),
+  feedbackController.remove
+);
 
 export default router;

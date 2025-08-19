@@ -21,7 +21,6 @@ app.use(express.json());
 app.use("/mychallenge/apply", myChallengeRouter);
 app.use("/user", userRouter);
 app.use("/challenge", challengeRouter);
-app.use("/feedback", feedbackRouter);
 app.use("/translation", translationRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/hearts", heartsRouter);
