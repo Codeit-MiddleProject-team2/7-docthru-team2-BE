@@ -115,6 +115,7 @@ export const findAllTranslations = async ({ challengeId, page = 1 }) => {
     u.id AS "userId",
     u.nickname,
     u.img,
+    u."userLevel",
     COUNT(h.id) AS hearts_count
   FROM "Translation" t
   JOIN "User" u ON t."userId" = u.id
@@ -131,4 +132,41 @@ export const findAllTranslations = async ({ challengeId, page = 1 }) => {
   }));
 
   return result;
+};
+
+// 최다 추천작 가져오기
+export const findBestTranslations = async (challengeId) => {
+  const rawResult = await prisma.$queryRaw`
+  SELECT
+    t.id,
+    t.content,
+    t."submittedAt",
+    u.id AS "userId",
+    u.nickname,
+    u.img,
+    u."userLevel",
+    COUNT(h.id) AS hearts_count
+  FROM "Translation" t
+  JOIN "User" u ON t."userId" = u.id
+  LEFT JOIN "Hearts" h ON h."translationId" = t.id
+  WHERE t."challengeId" = ${challengeId}
+    AND t."isSubmitted" = true
+  GROUP BY t.id, u.id
+  ORDER BY hearts_count DESC
+  FETCH FIRST 1 ROWS WITH TIES
+`;
+
+  const result = rawResult.map((row) => ({
+    ...row,
+    hearts_count: Number(row.hearts_count),
+  }));
+
+  return result;
+};
+
+// 번역 작업 생성
+export const createTranslation = async (data) => {
+  return await prisma.translation.create({
+    data,
+  });
 };

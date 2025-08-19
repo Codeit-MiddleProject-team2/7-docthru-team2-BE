@@ -1,6 +1,7 @@
 import {
   translationRepository,
   findAllTranslations,
+  findBestTranslations,
 } from "../repositories/translation.js";
 
 export const translationService = {
@@ -68,3 +69,22 @@ export const translationService = {
 export const getAllTranslations = async (query) => {
   return await findAllTranslations(query);
 };
+
+export const getBestTranslations = async (challengeId) => {
+  return await findBestTranslations(challengeId);
+};
+
+export async function postTranslation({
+  challengeId,
+  userId,
+  content,
+  isSubmitted,
+}) {
+  return await createTranslation({
+    challengeId,
+    userId,
+    content,
+    isSubmitted,
+    submittedAt: isSubmitted ? new Date() : null,
+  });
+}
