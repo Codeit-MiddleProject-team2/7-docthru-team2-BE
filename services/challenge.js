@@ -5,13 +5,22 @@ export class ChallengeService {
   challengeRepository = new ChallengeRepository();
 
   // 목록 조회: 페이지네이션 + 검색(q) + 필터(category/type/state)
-  findAllChallenges = async ({ page = 1, pageSize = 5, q, category, type, state } = {}) => {
+  findAllChallenges = async ({
+    page = 1,
+    pageSize = 5,
+    q,
+    category,
+    type,
+    state,
+  } = {}) => {
     // Prisma where 구성
     const where = {
       ...(q && { title: { contains: String(q), mode: "insensitive" } }),
       ...(type && { ype: type }),
       ...(state && { state: state }),
-      ...(Array.isArray(category) && category.length ? { category: { in: category } } : {}),
+      ...(Array.isArray(category) && category.length
+        ? { category: { in: category } }
+        : {}),
     };
 
     // page/pageSize → skip/take 계산
@@ -20,7 +29,11 @@ export class ChallengeService {
     const skip = (pageNum - 1) * take;
 
     // 레포지토리 호출 (쿼리 전담)
-    const { items, total } = await this.challengeRepository.findAllChallenges({ skip, take, where });
+    const { items, total } = await this.challengeRepository.findAllChallenges({
+      skip,
+      take,
+      where,
+    });
 
     // 프론트가 바로 쓰기 좋은 형태로 반환
     return {
@@ -37,11 +50,16 @@ export class ChallengeService {
   };
 
   updateChallenge = async (challengeId, updateData) => {
-    return await this.challengeRepository.updateChallenge(challengeId, updateData);
+    return await this.challengeRepository.updateChallenge(
+      challengeId,
+      updateData
+    );
   };
 
   getChallengeViewById = async (challengeId) => {
-    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
+    const challenge = await this.challengeRepository.findChallengeViewById(
+      challengeId
+    );
 
     if (!challenge) {
       return null;
@@ -49,7 +67,9 @@ export class ChallengeService {
 
     const { ChallengeStatusManage, ...rest } = challenge;
     const latestStatus =
-      Array.isArray(ChallengeStatusManage) && ChallengeStatusManage.length > 0 ? ChallengeStatusManage[0] : null;
+      Array.isArray(ChallengeStatusManage) && ChallengeStatusManage.length > 0
+        ? ChallengeStatusManage[0]
+        : null;
 
     return {
       ...rest,
@@ -80,5 +100,15 @@ export class ChallengeService {
     }
 
     return this.getChallengeViewById(challengeId);
+  };
+
+  createStatus = async (challengeId, state, reason) => {
+    const challenge = await this.challengeRepository.findChallengeById(
+      challengeId
+    );
+    if (!challenge) {
+      throw new Error("챌린지를 찾을 수 없습니다.");
+    }
+    return this.challengeRepository.createStatus(challengeId, state, reason);
   };
 }
