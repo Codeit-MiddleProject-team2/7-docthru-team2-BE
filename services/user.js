@@ -16,7 +16,7 @@ async function hashingPassword(password) {
 export function createToken(user, type = false) {
   const payload = { userId: user.id };
   const options = {
-    expiresIn: type ? "2w" : "1m",
+    expiresIn: type ? "2w" : "10m",
   };
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 }
@@ -99,11 +99,3 @@ function filterSensitiveUserData(user) {
   const { password, refreshToken, ...rest } = user;
   return rest;
 }
-
-// export default {
-//   createToken,
-//   refreshToken,
-//   createUser,
-//   getUser,
-//   getUserById,
-// };

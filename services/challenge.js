@@ -31,6 +31,8 @@ export class ChallengeService {
       challengeId,
       updateData
     );
+  postChallenge = async (data) => {
+    return await this.challengeRepository.postChallenge(data);
   };
 
   getChallengeViewById = async (challengeId) => {

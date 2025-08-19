@@ -67,3 +67,27 @@ export const countMyChallenges = async ({ userId, status, keyword }) => {
 
   return await prisma.challenge.count({ where });
 };
+
+export const findMyChallengesRepo = async (searchQuery = "", userId) => {
+  console.log(searchQuery);
+  console.log(userId);
+
+  const result = await prisma.$queryRaw`
+    SELECT
+    c.id,
+    c.title,
+    c.description,
+    c.url,
+    c.category,
+    c.type,
+    c."dueDate",
+    c.maximum,
+    c."createdAt",
+    c."updatedAt",
+    c."userId"
+    FROM "Challenge" c
+    JOIN "Translation" t ON c.id = t."challengeId"
+    WHERE t."userId" = ${userId} `;
+
+  return result;
+};

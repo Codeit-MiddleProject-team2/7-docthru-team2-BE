@@ -11,15 +11,15 @@ export class ChallengeRepository {
     category,
     type,
     state = {},
+    userId = "",
   }) => {
     const whereClause = {
       ...(searchQuery && {
         title: { contains: String(searchQuery), mode: "insensitive" },
       }),
       ...(category && { category }),
+      ...(userId && { userId }),
     };
-
-    // const sortOption = sort === "latest" ? : sort === "deadline" ?
 
     const sortOption =
       sort === "deadline" ? { dueDate: "asc" } : { createdAt: "desc" };
@@ -37,6 +37,10 @@ export class ChallengeRepository {
       prisma.challenge.count({ where: whereClause }),
     ]);
     return { items, total, numPage, numPageSize };
+  };
+
+  postChallenge = async (data) => {
+    return await prisma.challenge.create({ data });
   };
 
   updateChallenge = async (challengeId, updateData) => {

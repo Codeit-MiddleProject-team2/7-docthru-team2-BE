@@ -33,6 +33,7 @@ export const signupUser = async (req, res) => {
 
 // 로그인
 export const loginUser = async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await getUser(email, password);
