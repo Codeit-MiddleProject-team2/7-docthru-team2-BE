@@ -1,9 +1,6 @@
 import express from "express";
 import { translationService } from "../services/translation.js";
-import {
-  getAllTranslations,
-  postTranslation,
-} from "../services/translation.js";
+import { getAllTranslations } from "../services/translation.js";
 
 export const findAllTranslations = async (req, res) => {
   const { challengeId } = req.params;
@@ -59,26 +56,68 @@ export const translationController = {
     }
   },
 
+  // 생성 (POST)
   async createTranslation(req, res, next) {
     try {
-      const { challengeId, userId, content, isSubmitted } = req.body;
+      const userId = req.user.id;
+      const { challengeId, content, isSubmitted } = req.body;
 
-      // 필수 데이터 유효성 검사
-      if (!challengeId || !userId || !content) {
-        return res
-          .status(400)
-          .json({ message: "챌린지 ID, 사용자 ID, 내용이 필요합니다." });
-      }
-
-      const result = await translationService.postTranslation({
+      const newTranslation = await translationService.create({
         challengeId,
         userId,
         content,
         isSubmitted,
       });
 
-      res.status(201).json(result);
-      console.log("생성 또는 업데이트된 데이터:", result);
+      res.status(201).json(newTranslation);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 수정 (PUT)
+  async updateTranslation(req, res, next) {
+    try {
+      const { id: translationId } = req.params;
+      const userId = req.user.id;
+      const { content, isSubmitted } = req.body;
+
+      const updatedTranslation = await translationService.update(
+        translationId,
+        { content, isSubmitted },
+        userId
+      );
+
+      if (!updatedTranslation) {
+        return res
+          .status(404)
+          .json({ message: "해당 번역물을 찾을 수 없습니다." });
+      }
+
+      res.status(200).json(updatedTranslation);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getTranslationByChallengeId(req, res, next) {
+    try {
+      const { challengeId } = req.params;
+      const userId = req.user.id;
+
+      const translation = await translationService.findTranslation(
+        challengeId,
+        userId
+      );
+
+      // 번역물이 없으면 404 Not Found 반환
+      if (!translation) {
+        return res
+          .status(404)
+          .json({ message: "해당 챌린지에 대한 번역물을 찾을 수 없습니다." });
+      }
+
+      res.status(200).json(translation);
     } catch (error) {
       next(error);
     }

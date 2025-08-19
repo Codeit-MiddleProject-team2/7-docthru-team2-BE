@@ -42,23 +42,68 @@ export const translationRepository = {
     return prisma.translation.count({ where: { challengeId } });
   },
 
-  // 번역 작업 생성
-  createTranslation(data) {
+  // 번역 작업 생성 접근 시, 작업물 유무 체크
+
+  findSubmittedByChallengeAndUser(challengeId, userId) {
+    return prisma.translation.findFirst({
+      where: {
+        challengeId,
+        userId,
+        isSubmitted: true,
+      },
+      orderBy: {
+        submittedAt: "desc",
+      },
+      include: {
+        challenge: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+  },
+
+  // isSubmitted = false인 번역물 중 최신 데이터 조회
+  findLatestDraftByChallengeAndUser(challengeId, userId) {
+    return prisma.translation.findFirst({
+      where: {
+        challengeId,
+        userId,
+        isSubmitted: false,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      include: {
+        challenge: {
+          select: {
+            url: true,
+          },
+        },
+      },
+    });
+  },
+
+  // 생성
+  create(data) {
     return prisma.translation.create({
       data,
     });
   },
 
-  update({ id, content, isSubmitted }) {
-    const data = {};
-    if (typeof content === "string") data.content = content;
-    if (typeof isSubmitted === "boolean") {
-      data.isSubmitted = isSubmitted;
-      data.submittedAt = isSubmitted ? new Date() : null;
-    }
-    return prisma.translation.update({ where: { id }, data });
+  // 수정
+  update(id, data) {
+    return prisma.translation.update({
+      where: { id },
+      data: {
+        content: data.content,
+        isSubmitted: data.isSubmitted,
+      },
+    });
   },
 };
+
 // 특정 챌린지에 속하는 작업물 목록 조회
 export const findAllTranslations = async ({ challengeId, page = 1 }) => {
   const limit = 5;
@@ -86,11 +131,4 @@ export const findAllTranslations = async ({ challengeId, page = 1 }) => {
   }));
 
   return result;
-};
-
-// 번역 작업 생성
-export const createTranslation = async (data) => {
-  return await prisma.translation.create({
-    data,
-  });
 };
