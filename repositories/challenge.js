@@ -52,8 +52,6 @@ export class ChallengeRepository {
       include: {
         ChallengeStatusManage: {
           select: { state: true, updatedAt: true, reason: true },
-          orderBy: { updatedAt: "desc" },
-          take: 1,
         },
       },
     });
@@ -79,15 +77,8 @@ export class ChallengeRepository {
     });
   };
 
-  createChallengeStatus = async (challengeId, { state, reason }) => {
-    return prisma.challengeStatusManage.upsert({
-      where: { challengeId },
-      update: { state, reason },
-      create: { challengeId, state, reason },
-    });
-  };
-
   updateChallengeStatus = async (challengeId, { state, reason }) => {
+    console.log(state);
     return prisma.challengeStatusManage.update({
       where: { challengeId },
       data: { state, reason },

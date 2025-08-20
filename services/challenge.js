@@ -61,7 +61,7 @@ export class ChallengeService {
         throw new Error(`Invalid ChallengeState: ${state}`);
       }
       await this.challengeRepository.updateChallengeStatus(challengeId, {
-        state: ChallengeState,
+        state,
         reason,
       });
     }
