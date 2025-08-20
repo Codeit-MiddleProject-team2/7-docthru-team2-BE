@@ -69,7 +69,7 @@ model Translation {
   challengeId String
   user        User       @relation(fields: [userId], references: [id])
   userId      String
-  title       String     @default("제목 없음")
+  title       String?
   content     String
   isSubmitted Boolean
   submittedAt DateTime?
