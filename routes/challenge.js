@@ -20,8 +20,5 @@ router.post("/", challengesController.postChallenge);
 router.patch("/:challengeId", challengesController.updateChallengeWithStatus);
 
 // 챌린지 상태
-router.post(
-  "/:challengeId/status",
-  challengesController.createChallengeStatusManage
-);
+router.post("/:challengeId/status", challengesController.createChallengeStatusManage);
 export default router;
