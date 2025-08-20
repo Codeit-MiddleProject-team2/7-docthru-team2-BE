@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { challengeData, challengeStatusData } from "./challengeSeed.js";
-import { feedbackData } from "./feedbackSeed.js";
-import { heartsData } from "./heartsSeed.js";
-import { translationData } from "./translationSeed.js";
-import { userData } from "./userSeed.js";
+import { challengeData, challengeStatusData } from "../prisma/challengeSeed.js";
+import { feedbackData } from "../prisma/feedbackSeed.js";
+import { heartsData } from "../prisma/heartsSeed.js";
+import { translationData } from "../prisma/translationSeed.js";
+import { userData } from "../prisma/userSeed.js";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
