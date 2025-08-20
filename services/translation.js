@@ -64,6 +64,17 @@ export const translationService = {
 
     return await translationRepository.update(translationId, data);
   },
+
+  async findDrafts(challengeId, userId) {
+    return await translationRepository.findDraftsByChallengeAndUser(
+      challengeId,
+      userId
+    );
+  },
+
+  async deleteByChallenge(challengeId, userId) {
+    return await translationRepository.deleteByChallenge(challengeId, userId);
+  },
 };
 
 export const getAllTranslations = async (query) => {

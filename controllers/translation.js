@@ -113,6 +113,31 @@ export const translationController = {
       next(error);
     }
   },
+  async getDrafts(req, res, next) {
+    try {
+      const { challengeId } = req.params;
+      const userId = req.user.id;
+
+      const drafts = await translationService.findDrafts(challengeId, userId);
+
+      res.status(200).json(drafts);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async deleteByChallenge(req, res, next) {
+    try {
+      const { challengeId } = req.params;
+      const userId = req.user.id;
+
+      await translationService.deleteByChallenge(challengeId, userId);
+
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  },
 
   async getTranslationByChallengeId(req, res, next) {
     try {
