@@ -8,7 +8,7 @@ export class ChallengeController {
       const challenges = await this.challengeService.findAllChallenges(
         req.query
       );
-      return res.status(200).json({ data: challenges });
+      return res.status(200).json(challenges);
     } catch (error) {
       next(error);
     }
@@ -43,6 +43,16 @@ export class ChallengeController {
     }
   };
 
+  postChallenge = async (req, res, next) => {
+    const { data } = req.body;
+    try {
+      const challenge = await this.challengeService.postChallenge(data);
+      return res.status(200).json(challenge);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   getChallengeViewById = async (req, res, next) => {
     try {
       const { challengeId } = req.params;
@@ -58,6 +68,8 @@ export class ChallengeController {
   };
 
   updateChallengeWithStatus = async (req, res, next) => {
+    console.log(req.params);
+    console.log(req.body);
     try {
       const { challengeId } = req.params;
       const updateData = req.body;
@@ -87,6 +99,16 @@ export class ChallengeController {
       });
     } catch (err) {
       next(err);
+    }
+  };
+  getCategorys = async (req, res, next) => {
+    const { keyword } = req.query;
+    try {
+      const categorys = await this.challengeService.getCategorys(keyword);
+      return res.status(200).json(categorys);
+    } catch (e) {
+      console.error("❌ [getCategorys] error:", e);
+      res.status(500).json({ error: `${e}` });
     }
   };
 }

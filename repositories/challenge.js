@@ -3,22 +3,45 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class ChallengeRepository {
-  findAllChallenges = async ({ skip = 0, take = 5, where = {} } = {}) => {
+  findAllChallenges = async ({
+    page = 1,
+    pageSize = 5,
+    searchQuery,
+    sort,
+    category,
+    type,
+    state = {},
+    userId = "",
+  }) => {
+    const whereClause = {
+      ...(searchQuery && {
+        title: { contains: String(searchQuery), mode: "insensitive" },
+      }),
+      ...(category && { category }),
+      ...(userId && { userId }),
+    };
+
+    const sortOption =
+      sort === "deadline" ? { dueDate: "asc" } : { createdAt: "desc" };
+
+    const numPage = parseInt(page);
+    const numPageSize = parseInt(pageSize);
+
     const [items, total] = await Promise.all([
       prisma.challenge.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip,
-        take,
+        where: whereClause,
+        orderBy: sortOption,
+        skip: (numPage - 1) * numPageSize,
+        take: numPageSize,
       }),
-      prisma.challenge.count({ where }),
+      prisma.challenge.count({ where: whereClause }),
     ]);
-    return { items, total };
+    return { items, total, numPage, numPageSize };
   };
 
-  findChallengeById = async (challengeId) => {
-    return prisma.challenge.findUnique({
-      where: { id: challengeId }, // id는 String(uuid)
+  postChallenge = async (data) => {
+    return await prisma.challenge.create({
+      data: { ...data, maximum: parseInt(data.maximum) },
     });
   };
 
@@ -68,5 +91,15 @@ export class ChallengeRepository {
     return prisma.challengeStatusManage.create({
       data: { challengeId, state, reason },
     });
+  };
+  getCategorys = async (keyword = "") => {
+    return await prisma.$queryRaw`
+    SELECT c.category 
+    FROM "Challenge" c
+    WHERE c.category ILIKE '%' || ${keyword} || '%'
+    GROUP BY c.category
+    ORDER BY COUNT(*) DESC
+    LIMIT 5;
+  `;
   };
 }

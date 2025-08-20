@@ -1,6 +1,7 @@
 import {
   findMyChallenges,
   countMyChallenges,
+  findMyChallengesRepo,
 } from "../repositories/myChallenge.js";
 
 export async function getMyChallenges({
@@ -32,3 +33,8 @@ export async function getMyChallenges({
     challenges: challenges,
   };
 }
+
+export const findMyChallengesServ = async (searchQuery, userId) => {
+  const result = await findMyChallengesRepo(searchQuery, userId);
+  return { challenges: result };
+};

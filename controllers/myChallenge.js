@@ -1,4 +1,8 @@
-import { getMyChallenges } from "../services/myChallenge.js";
+import { ChallengeService } from "../services/challenge.js";
+import {
+  findMyChallengesServ,
+  getMyChallenges,
+} from "../services/myChallenge.js";
 
 export const myChallengesApply = async (req, res, next) => {
   const userId = req.user.id;
@@ -36,6 +40,18 @@ export const myChallengesApply = async (req, res, next) => {
     }
 
     res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllChallenges = async (req, res, next) => {
+  const userId = req.user.id;
+  const { searchQuery } = req.query;
+
+  try {
+    const challenges = await findMyChallengesServ(searchQuery, userId);
+    return res.status(200).json(challenges);
   } catch (error) {
     next(error);
   }

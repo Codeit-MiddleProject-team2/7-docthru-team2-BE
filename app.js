@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/mychallenge/apply", myChallengeRouter);
+app.use("/mychallenge", myChallengeRouter);
 app.use("/user", userRouter);
 app.use("/challenge", challengeRouter);
 app.use("/translation", translationRouter);
