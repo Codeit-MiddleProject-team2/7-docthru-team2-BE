@@ -47,7 +47,7 @@ export class ChallengeController {
     const { data } = req.body;
     try {
       const challenge = await this.challengeService.postChallenge(data);
-      const status = await this.challengeService.createStatus(challenge.id);
+      await this.challengeService.createStatus(challenge.id);
       return res.status(200).json(challenge);
     } catch (e) {
       console.error(e);

@@ -69,7 +69,7 @@ export class ChallengeRepository {
         },
         _count: {
           select: {
-            Translation: { where: { challengeId, isSubmitted: true } },
+            Translation: { where: { challengeId } },
           },
         },
         user: {
