@@ -12,9 +12,7 @@ export const myChallengesApply = async (req, res, next) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
 
-  if (orderBy && orderBy !== "latest") {
-    status = null;
-  } else if (status) {
+  if (status) {
     status = status.toUpperCase();
   }
 
@@ -39,7 +37,7 @@ export const myChallengesApply = async (req, res, next) => {
       });
     }
 
-    res.json(result);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }

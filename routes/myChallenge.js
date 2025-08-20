@@ -10,4 +10,6 @@ const router = express.Router();
 router.get("/apply", authLoginMiddleware, myChallengesApply);
 router.get("/", authLoginMiddleware, getAllChallenges);
 
+router.get("/applyWidthAdmin", authLoginMiddleware, myChallengesApply);
+
 export default router;
