@@ -14,17 +14,18 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  email       String        @unique
-  password    String
-  nickname    String
-  img         String        @default("")
-  userLevel   String?
-  isAdmin     Boolean       @default(false)
-  Challenge   Challenge[]
-  Translation Translation[]
-  Feedback    Feedback[]
-  Hearts      Hearts[]
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  nickname     String
+  img          String        @default("")
+  userLevel    String?
+  isAdmin      Boolean       @default(false)
+  refreshToken String?
+  Challenge    Challenge[]
+  Translation  Translation[]
+  Feedback     Feedback[]
+  Hearts       Hearts[]
 }
 
 model Challenge {

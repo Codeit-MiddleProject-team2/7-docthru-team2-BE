@@ -30,6 +30,11 @@
 - 스키마 변경한 경우 실행해야 함.
 - (cmd) npx prisma migrate dev --name db
 
+# 유저 기능 사용법 가이드라인
+
+- 노션 링크를 참고 해 주세요.
+  https://waiting-houseboat-577.notion.site/24f18c91c3888097a152d3f3b62ca3ca?source=copy_link
+
 # 파일 실행 순서
 
 - app.js -> routes -> controllers -> services -> repositories

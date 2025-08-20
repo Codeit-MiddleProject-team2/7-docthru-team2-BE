@@ -4,8 +4,14 @@ import { feedbackData } from "./feedbackSeed.js";
 import { heartsData } from "./heartsSeed.js";
 import { translationData } from "./translationSeed.js";
 import { userData } from "./userSeed.js";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
+
+// 비밀번호 해시 함수
+async function hashingPassword(password) {
+  return bcrypt.hash(password, 10);
+}
 
 async function main() {
   await prisma.$transaction([
@@ -20,8 +26,9 @@ async function main() {
   // User 데이터 넣기
   for (const user of userData) {
     const { createdAt, ...newUser } = user;
+    const hassedPassword = await hashingPassword(user.password);
     await prisma.user.create({
-      data: { ...newUser, id: String(newUser.id) },
+      data: { ...newUser, password: hassedPassword },
     });
   }
 
