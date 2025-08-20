@@ -87,6 +87,13 @@ export class ChallengeRepository {
     });
   };
 
+  updateChallengeStatus = async (challengeId, { state, reason }) => {
+    return prisma.challengeStatusManage.update({
+      where: { challengeId },
+      data: { state, reason },
+    });
+  };
+
   createStatus = async (challengeId, state, reason = null) => {
     return prisma.challengeStatusManage.create({
       data: { challengeId, state, reason },
