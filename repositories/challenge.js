@@ -66,8 +66,6 @@ export class ChallengeRepository {
       include: {
         ChallengeStatusManage: {
           select: { state: true, updatedAt: true, reason: true },
-          orderBy: { updatedAt: "desc" },
-          take: 1,
         },
         _count: {
           select: {
