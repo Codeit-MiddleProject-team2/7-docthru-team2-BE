@@ -131,6 +131,15 @@ export const translationRepository = {
       },
     });
   },
+
+  async findByChallengeAndUser(challengeId, userId) {
+    return await prisma.translation.findUnique({
+      where: {
+        challengeId,
+        userId,
+      },
+    });
+  },
 };
 
 // 특정 챌린지에 속하는 작업물 목록 조회

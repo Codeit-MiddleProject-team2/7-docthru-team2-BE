@@ -92,6 +92,7 @@ export class ChallengeRepository {
       data: { challengeId, state, reason },
     });
   };
+
   getCategorys = async (keyword = "") => {
     return await prisma.$queryRaw`
     SELECT c.category 
