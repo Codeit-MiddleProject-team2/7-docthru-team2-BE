@@ -75,7 +75,7 @@ export class ChallengeService {
   };
 
   createStatus = async (challengeId, state, reason) => {
-    const challenge = await this.challengeRepository.findChallengeById(
+    const challenge = await this.challengeRepository.findChallengeViewById(
       challengeId
     );
     if (!challenge) {
