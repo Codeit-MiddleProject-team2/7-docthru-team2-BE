@@ -16,7 +16,7 @@ async function hashingPassword(password) {
 export function createToken(user, type = false) {
   const payload = { userId: user.id };
   const options = {
-    expiresIn: type ? "2w" : "10m",
+    expiresIn: type ? "2w" : "1h",
   };
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 }

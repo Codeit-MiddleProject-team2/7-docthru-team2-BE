@@ -37,13 +37,13 @@ router.put(
 
 router.get(
   "/:challengeId/drafts",
-  passport.authenticate("access-token", { session: false }),
+  authLoginMiddleware,
   translationController.getDrafts
 );
 
 router.delete(
   "/:challengeId",
-  passport.authenticate("access-token", { session: false }),
+  authLoginMiddleware,
   translationController.deleteByChallenge
 );
 

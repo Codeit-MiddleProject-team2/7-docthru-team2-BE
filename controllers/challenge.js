@@ -40,6 +40,9 @@ export class ChallengeController {
       return res.status(200).json({ data: updatedChallenge });
     } catch (error) {
       next(error);
+    }
+  };
+
   postChallenge = async (req, res, next) => {
     const { data } = req.body;
     try {
@@ -65,6 +68,8 @@ export class ChallengeController {
   };
 
   updateChallengeWithStatus = async (req, res, next) => {
+    console.log(req.params);
+    console.log(req.body);
     try {
       const { challengeId } = req.params;
       const updateData = req.body;
@@ -94,6 +99,8 @@ export class ChallengeController {
       });
     } catch (err) {
       next(err);
+    }
+  };
   getCategorys = async (req, res, next) => {
     const { keyword } = req.query;
     try {

@@ -31,6 +31,7 @@ export class ChallengeService {
       challengeId,
       updateData
     );
+  };
   postChallenge = async (data) => {
     return await this.challengeRepository.postChallenge(data);
   };
@@ -89,6 +90,7 @@ export class ChallengeService {
       throw new Error("챌린지를 찾을 수 없습니다.");
     }
     return this.challengeRepository.createStatus(challengeId, state, reason);
+  };
   getCategorys = async (keyword) => {
     const rawCategorys = await this.challengeRepository.getCategorys(keyword);
     let num = 0;

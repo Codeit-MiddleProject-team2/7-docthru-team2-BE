@@ -20,7 +20,6 @@ const refreshTokenOptions = {
 
 // 콜백 함수
 async function jwtVerify(payload, done) {
-  console.log(payload);
   try {
     const user = await getUserById(payload.userId);
     if (!user) {
