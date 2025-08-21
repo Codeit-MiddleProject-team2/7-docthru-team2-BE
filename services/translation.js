@@ -69,7 +69,7 @@ export const translationService = {
     const existingTranslation = await translationRepository.findById(
       translationId
     );
-
+    console.log("Existing Translation:", existingTranslation);
     if (!existingTranslation) {
       return null;
     }
