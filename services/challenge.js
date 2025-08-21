@@ -23,14 +23,19 @@ export class ChallengeService {
   };
 
   updateChallenge = async (challengeId, updateData) => {
-    return await this.challengeRepository.updateChallenge(challengeId, updateData);
+    return await this.challengeRepository.updateChallenge(
+      challengeId,
+      updateData
+    );
   };
   postChallenge = async (data) => {
     return await this.challengeRepository.postChallenge(data);
   };
 
   getChallengeViewById = async (challengeId) => {
-    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
+    const challenge = await this.challengeRepository.findChallengeViewById(
+      challengeId
+    );
 
     if (!challenge) {
       return null;
@@ -70,12 +75,25 @@ export class ChallengeService {
   };
 
   createStatus = async (challengeId, state, reason) => {
-    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
+    const challenge = await this.challengeRepository.findChallengeViewById(
+      challengeId
+    );
     if (!challenge) {
       throw new Error("챌린지를 찾을 수 없습니다.");
     }
     return this.challengeRepository.createStatus(challengeId, state, reason);
   };
+
+  updateStatus = async (challengeId, state, reason) => {
+    const challenge = await this.challengeRepository.findChallengeViewById(
+      challengeId
+    );
+    if (!challenge) {
+      throw new Error("챌린지를 찾을 수 없습니다.");
+    }
+    return this.challengeRepository.updateStatus(challengeId, state, reason);
+  };
+
   getCategorys = async (keyword) => {
     const rawCategorys = await this.challengeRepository.getCategorys(keyword);
     let num = 0;
