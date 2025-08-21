@@ -22,54 +22,41 @@ export class ChallengeService {
     };
   };
 
-  findChallengeById = async (challengeId) => {
-    return this.challengeRepository.findChallengeById(challengeId);
-  };
-
   updateChallenge = async (challengeId, updateData) => {
-    return await this.challengeRepository.updateChallenge(
-      challengeId,
-      updateData
-    );
+    return await this.challengeRepository.updateChallenge(challengeId, updateData);
   };
   postChallenge = async (data) => {
     return await this.challengeRepository.postChallenge(data);
   };
 
   getChallengeViewById = async (challengeId) => {
-    const challenge = await this.challengeRepository.findChallengeViewById(
-      challengeId
-    );
+    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
 
     if (!challenge) {
       return null;
     }
 
     const { ChallengeStatusManage, ...rest } = challenge;
-    const latestStatus =
-      Array.isArray(ChallengeStatusManage) && ChallengeStatusManage.length > 0
-        ? ChallengeStatusManage[0]
-        : null;
+    const { state: challengeState, updatedAt, reason } = ChallengeStatusManage;
 
     return {
       ...rest,
-      challengeState: latestStatus?.state ?? null,
-      updatedAt: latestStatus?.updatedAt ?? challenge.updatedAt,
-      reason: latestStatus?.reason ?? null,
+      challengeState,
+      reason,
     };
   };
 
   updateChallengeWithStatus = async (challengeId, updateData) => {
-    const { ChallengeState, reason, ...core } = updateData;
+    const { state, reason, ...core } = updateData;
 
     // 상태 변경 요청이 있으면 상태 이력 생성
-    if (ChallengeState || typeof reason !== "undefined") {
+    if (state || typeof reason !== "undefined") {
       const valid = ["PENDING", "ACCEPTED", "REJECTED", "DELETED"];
-      if (ChallengeState && !valid.includes(ChallengeState)) {
-        throw new Error(`Invalid ChallengeState: ${ChallengeState}`);
+      if (state && !valid.includes(state)) {
+        throw new Error(`Invalid ChallengeState: ${state}`);
       }
       await this.challengeRepository.createChallengeStatus(challengeId, {
-        state: ChallengeState,
+        state,
         reason,
       });
     }
@@ -83,9 +70,7 @@ export class ChallengeService {
   };
 
   createStatus = async (challengeId, state, reason) => {
-    const challenge = await this.challengeRepository.findChallengeById(
-      challengeId
-    );
+    const challenge = await this.challengeRepository.findChallengeViewById(challengeId);
     if (!challenge) {
       throw new Error("챌린지를 찾을 수 없습니다.");
     }

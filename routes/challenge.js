@@ -19,15 +19,6 @@ router.post("/", challengesController.postChallenge);
 //챌린지 수정하기 (계속하기)
 router.patch("/:challengeId", challengesController.updateChallengeWithStatus);
 
-router.get("/:challengeId/view", challengesController.getChallengeViewById);
-router.patch(
-  "/:challengeId/view",
-  challengesController.updateChallengeWithStatus
-);
-
 // 챌린지 상태
-router.post(
-  "/:challengeId/status",
-  challengesController.createChallengeStatusManage
-);
+router.post("/:challengeId/status", challengesController.createChallengeStatusManage);
 export default router;
