@@ -7,7 +7,7 @@ export async function verifyTranslationAuth(req, res, next) {
   const userId = req.user.id;
 
   try {
-    const translation = await translationRepository.getById(translationId);
+    const translation = await translationRepository.findById(translationId);
     if (!translation) {
       const error = new Error("translation not found");
       error.code = 404;

@@ -31,8 +31,16 @@ router.post("/", authLoginMiddleware, translationController.createTranslation);
 // 수정
 router.put(
   "/:id",
+  (req, res, next) => {
+    console.log("PUT /:id 라우터에 요청이 들어옴");
+    next();
+  },
   authLoginMiddleware,
-  verifyTranslationAuth,
+  // verifyTranslationAuth,
+  (req, res, next) => {
+    console.log("PUT /:id 로그인 미들웨어 이후");
+    next();
+  },
   translationController.updateTranslation
 );
 
