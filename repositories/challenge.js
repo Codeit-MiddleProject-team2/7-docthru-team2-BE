@@ -21,7 +21,8 @@ export class ChallengeRepository {
       ...(userId && { userId }),
     };
 
-    const sortOption = sort === "deadline" ? { dueDate: "asc" } : { createdAt: "desc" };
+    const sortOption =
+      sort === "deadline" ? { dueDate: "asc" } : { createdAt: "desc" };
 
     const numPage = parseInt(page);
     const numPageSize = parseInt(pageSize);
@@ -89,6 +90,13 @@ export class ChallengeRepository {
   createStatus = async (challengeId, state, reason = null) => {
     return prisma.challengeStatusManage.create({
       data: { challengeId, state, reason },
+    });
+  };
+
+  updateStatus = async (challengeId, state, reason = null) => {
+    return prisma.challengeStatusManage.update({
+      where: { challengeId },
+      data: { state, reason },
     });
   };
 

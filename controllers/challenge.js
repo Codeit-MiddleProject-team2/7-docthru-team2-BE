@@ -84,12 +84,13 @@ export class ChallengeController {
     }
   };
 
-  createChallengeStatusManage = async (req, res, next) => {
+  updateChallengeStatusManage = async (req, res, next) => {
     const { challengeId } = req.params;
     const { state, reason = null } = req.body;
-
+    console.log("Request body received:", state, reason);
+    console.log("Challenge ID received:", challengeId);
     try {
-      const newStatus = await this.challengeService.createStatus(
+      const newStatus = await this.challengeService.updateStatus(
         challengeId,
         state,
         reason
@@ -102,6 +103,7 @@ export class ChallengeController {
       next(err);
     }
   };
+
   getCategorys = async (req, res, next) => {
     const { keyword } = req.query;
     try {
