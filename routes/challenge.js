@@ -1,5 +1,6 @@
 import express from "express";
 import { ChallengeController } from "../controllers/challenge.js";
+import { authLoginMiddleware } from "../config/passport.js";
 
 const router = express.Router();
 const challengesController = new ChallengeController();
@@ -17,11 +18,19 @@ router.get("/:challengeId", challengesController.getChallengeViewById);
 router.post("/", challengesController.postChallenge);
 
 //챌린지 수정하기 (계속하기)
-router.patch("/:challengeId", challengesController.updateChallengeWithStatus);
+router.patch(
+  "/:challengeId",
+  authLoginMiddleware,
+  challengesController.updateChallengeWithStatus
+);
+// patch 요청을 보내면, 앞으로
+// 프론트에서는 -> Authorzatio~ bearer 토큰을 첨부해서 보내야 한다
+// 백에서는 요청을 받으면 그 토큰을 검사한다 (authLogin~ 저 미들웨어가 검사함)
 
 // 챌린지 상태
 router.put(
   "/:challengeId/status",
   challengesController.updateChallengeStatusManage
 );
+
 export default router;

@@ -67,7 +67,7 @@ model Translation {
   id          String     @id @default(uuid())
   challenge   Challenge  @relation(fields: [challengeId], references: [id])
   challengeId String
-  user        User       @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   title       String?
   content     String
@@ -81,9 +81,9 @@ model Translation {
 
 model Feedback {
   id            String      @id @default(uuid())
-  translation   Translation @relation(fields: [translationId], references: [id])
+  translation   Translation @relation(fields: [translationId], references: [id], onDelete: Cascade)
   translationId String
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   content       String
   createdAt     DateTime    @default(now())
@@ -92,9 +92,9 @@ model Feedback {
 
 model Hearts {
   id            String      @id @default(uuid())
-  translation   Translation @relation(fields: [translationId], references: [id])
+  translation   Translation @relation(fields: [translationId], references: [id], onDelete: Cascade)
   translationId String
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   createdAt     DateTime    @default(now())
 }

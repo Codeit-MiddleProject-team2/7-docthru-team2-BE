@@ -60,7 +60,7 @@ export class ChallengeService {
       if (state && !valid.includes(state)) {
         throw new Error(`Invalid ChallengeState: ${state}`);
       }
-      await this.challengeRepository.createChallengeStatus(challengeId, {
+      await this.challengeRepository.updateChallengeStatus(challengeId, {
         state,
         reason,
       });

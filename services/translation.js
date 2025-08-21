@@ -90,8 +90,8 @@ export const translationService = {
     );
   },
 
-  async deleteByChallenge(challengeId, userId) {
-    return await translationRepository.deleteByChallenge(challengeId, userId);
+  async deleteByChallenge(id, userId) {
+    return await translationRepository.deleteByChallenge(id, userId);
   },
 };
 

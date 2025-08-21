@@ -130,10 +130,10 @@ export const translationController = {
 
   async deleteByChallenge(req, res, next) {
     try {
-      const { challengeId } = req.params;
+      const { id } = req.params;
       const userId = req.user.id;
 
-      await translationService.deleteByChallenge(challengeId, userId);
+      await translationService.deleteByChallenge(id, userId);
 
       res.status(204).end();
     } catch (error) {
