@@ -51,7 +51,7 @@ router.get(
 );
 
 router.delete(
-  "/:challengeId",
+  "/:id",
   authLoginMiddleware,
   translationController.deleteByChallenge
 );

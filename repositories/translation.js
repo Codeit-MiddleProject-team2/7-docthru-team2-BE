@@ -138,10 +138,12 @@ export const translationRepository = {
     });
   },
 
-  deleteByChallenge(challengeId, userId) {
-    return prisma.translation.deleteMany({
+  async deleteByChallenge(id, userId) {
+    console.log(id);
+    console.log(userId);
+    return await prisma.translation.delete({
       where: {
-        challengeId,
+        id,
         userId,
       },
     });
