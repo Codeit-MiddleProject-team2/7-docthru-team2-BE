@@ -16,7 +16,7 @@ router.get("/", feedbackController.list);
 router.patch(
   "/:id",
   authLoginMiddleware,
-  verifyFeedbackAuth,
+  // verifyFeedbackAuth,  // 인증 미들웨어는 필요하지 않아서 주석처리
   feedbackController.update
 );
 

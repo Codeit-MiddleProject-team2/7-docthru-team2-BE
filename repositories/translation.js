@@ -11,8 +11,10 @@ export const translationRepository = {
       where: { id },
       include: {
         user: { select: { id: true, nickname: true, isAdmin: true } },
-        challenge: { select: { id: true, title: true } },
-        _count: { select: { Feedback: true, Hearts: true } },
+        challenge: {
+          select: { id: true, title: true, category: true, type: true },
+        },
+        _count: { select: { Feedback: true, Hearts: true } }, // 관계명 대문자 사용
       },
     });
   },
