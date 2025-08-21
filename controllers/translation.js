@@ -74,11 +74,12 @@ export const translationController = {
   async createTranslation(req, res, next) {
     try {
       const userId = req.user.id;
-      const { challengeId, content, isSubmitted } = req.body;
+      const { challengeId, title, content, isSubmitted } = req.body;
 
       const newTranslation = await translationService.create({
         challengeId,
         userId,
+        title,
         content,
         isSubmitted,
       });
@@ -94,11 +95,11 @@ export const translationController = {
     try {
       const { id: translationId } = req.params;
       const userId = req.user.id;
-      const { content, isSubmitted } = req.body;
+      const { title, content, isSubmitted } = req.body;
 
       const updatedTranslation = await translationService.update(
         translationId,
-        { content, isSubmitted },
+        { title, content, isSubmitted },
         userId
       );
 
@@ -144,19 +145,12 @@ export const translationController = {
       const { challengeId } = req.params;
       const userId = req.user.id;
 
-      const translation = await translationService.findTranslation(
+      const data = await translationService.findTranslation(
         challengeId,
         userId
       );
 
-      // 번역물이 없으면 404 Not Found 반환
-      if (!translation) {
-        return res
-          .status(404)
-          .json({ message: "해당 챌린지에 대한 번역물을 찾을 수 없습니다." });
-      }
-
-      res.status(200).json(translation);
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }

@@ -26,7 +26,10 @@ export const translationService = {
         userId
       );
     if (submittedTranslation) {
-      return submittedTranslation;
+      return {
+        translation: submittedTranslation,
+        challenge: submittedTranslation.challenge,
+      };
     }
 
     // 2. 제출된 번역물이 없으면, isSubmitted = false인 임시 저장된 번역물 중 가장 최신 데이터를 조회
@@ -36,11 +39,24 @@ export const translationService = {
         userId
       );
     if (draftTranslation) {
-      return draftTranslation;
+      return {
+        translation: draftTranslation,
+        challenge: draftTranslation.challenge,
+      };
     }
 
-    // 3. 둘 다 없으면 null 반환
-    return null;
+    // 3. 둘 다 없으면 챌린지 반환
+    const challenge = await translationRepository.findChallengeById(
+      challengeId
+    );
+
+    if (!challenge) {
+      return null;
+    }
+    return {
+      translation: null,
+      challenge: challenge,
+    };
   },
 
   // 생성
