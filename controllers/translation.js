@@ -62,6 +62,7 @@ export const translationController = {
     try {
       const id = String(req.params.id);
       const data = await translationService.getById(id);
+      console.log("Translation data:", data);
       if (!data)
         return res.status(404).json({ message: "Translation not found" });
       return res.json(data);

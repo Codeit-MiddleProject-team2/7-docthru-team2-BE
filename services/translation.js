@@ -15,7 +15,9 @@ export const translationService = {
   },
 
   getById(id) {
-    return translationRepository.findByIdWithRelations(id);
+    const result = translationRepository.findByIdWithRelations(id);
+    console.log("result:", result);
+    return result;
   },
 
   async findTranslation(challengeId, userId) {
