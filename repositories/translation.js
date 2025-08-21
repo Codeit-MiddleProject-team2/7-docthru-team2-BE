@@ -12,7 +12,7 @@ export const translationRepository = {
       include: {
         user: { select: { id: true, nickname: true, isAdmin: true } },
         challenge: { select: { id: true, title: true } },
-        _count: { select: { Feedback: true, Hearts: true } }, // 관계명 대문자 사용
+        _count: { select: { Feedback: true, Hearts: true } },
       },
     });
   },
@@ -58,6 +58,7 @@ export const translationRepository = {
         challenge: {
           select: {
             url: true,
+            title: true,
           },
         },
       },
@@ -79,8 +80,19 @@ export const translationRepository = {
         challenge: {
           select: {
             url: true,
+            title: true,
           },
         },
+      },
+    });
+  },
+  findChallengeById(challengeId) {
+    return prisma.challenge.findUnique({
+      where: { id: challengeId },
+      select: {
+        id: true,
+        title: true,
+        url: true,
       },
     });
   },
@@ -97,6 +109,7 @@ export const translationRepository = {
     return prisma.translation.update({
       where: { id },
       data: {
+        title: data.title,
         content: data.content,
         isSubmitted: data.isSubmitted,
       },
